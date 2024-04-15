@@ -14,6 +14,8 @@ const WEEKDAY = [
 const INCREMENT = 1;
 const CHAR_COUNT = 2;
 
+const reloadPage = () => window.location.reload();
+
 const renderCurrentDate = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -25,8 +27,6 @@ const renderCurrentDate = () => {
 }
 
 function Header() {
-  const reloadPage = () => window.location.reload();
-
   return (
     <HeaderContainer>
       <HeaderTitle>
