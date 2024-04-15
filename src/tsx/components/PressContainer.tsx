@@ -1,6 +1,6 @@
 import React from "react";
-import gridIcon from "../img/gridIcon.svg";
-import listIcon from "../img/listIcon.svg";
+import gridIcon from "../../img/gridIcon.svg";
+import listIcon from "../../img/listIcon.svg";
 import styled from "styled-components";
 
 function PressContainer() {
