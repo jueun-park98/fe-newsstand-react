@@ -68,7 +68,7 @@ const rollingAnimation = css`
         transform: translateY(0);
       }
       100% {
-        transform: translateY(-38px);
+        transform: translateY(-2.7142em);
       }
     `} 5s linear;
 `;
@@ -80,6 +80,9 @@ const Container = styled.div`
 `;
 
 const TextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 32.85em;
   height: 3.43em;
   border: 1px solid #d2dae0;

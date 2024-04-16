@@ -45,13 +45,13 @@ const HeaderTitle = styled.div`
 `;
 
 const HeaderTitleText = styled.span`
-  font-size: 24px;
+  font-size: 1.7143em;
   font-weight: bold;
-  margin-left: 8px;
+  margin-left: 0.5714em;
 `;
 
 const HeaderDate = styled.span`
-  font-size: 16px;
+  font-size: 1.1429em;
   color: #5f6e76;
   position: relative;
   top: 50%;

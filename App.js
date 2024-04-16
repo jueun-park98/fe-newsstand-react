@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import newsRouter from "./routes/news.js";
-import subscriptionRouter from "./routes/subscribe.js";
+import subscriptionRouter from "./routes/subscription.js";
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
