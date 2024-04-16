@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import gridIcon from "../../img/gridIcon.svg";
 import listIcon from "../../img/listIcon.svg";
 import styled from "styled-components";
 
 function PressContainer() {
+  const [selected, setSelected] = useState<number>(0);
+
+  const toggleSelected: (index: number) => void = (index) => {
+    setSelected(index);
+  };
+
   return (
     <Container>
       <Menu>
         <PressMenu>
-          <PressTextMenu aria-selected="true">전체 언론사</PressTextMenu>
-          <PressTextMenu aria-selected="false">내가 구독한 언론사</PressTextMenu>
+          <PressTextMenu aria-selected={selected === 0} onClick={() => toggleSelected(0)}>
+            전체 언론사
+          </PressTextMenu>
+          <PressTextMenu aria-selected={selected === 1} onClick={() => toggleSelected(1)}>
+            내가 구독한 언론사
+          </PressTextMenu>
         </PressMenu>
         <ViewMenu>
           <ViewIcon src={listIcon} alt="list-icon"></ViewIcon>
@@ -39,7 +49,7 @@ const PressMenu = styled.li`
 
 const PressTextMenu = styled.span`
   font-weight: 700;
-  color: ${(props) => (props["aria-selected"] === "true" ? "#14212b" : "#879298")};
+  color: ${(props) => (props["aria-selected"] === true ? "#14212b" : "#879298")};
 `;
 
 const ViewMenu = styled.li`
@@ -55,7 +65,7 @@ const ViewIcon = styled.img`
 const View = styled.div`
   width: 66.3em;
   height: 27.57em;
-  border: 1px solid #d2dae0;
+  border: 0.0714em solid #d2dae0;
 `;
 
 export default PressContainer;
