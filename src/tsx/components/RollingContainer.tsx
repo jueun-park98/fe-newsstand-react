@@ -60,11 +60,11 @@ function RollingContainer({ news }: RollingProps) {
 }
 
 const toggleLeftIndex: (prevLeftIndex: number, maxIndex: number) => number = (prevLeftIndex, maxIndex) => {
-  return prevLeftIndex === maxIndex - 1 ? LEFT_START_INDEX : prevLeftIndex + 1;
+  return (prevLeftIndex + 1) % maxIndex;
 };
 
 const toggleRightIndex: (prevRightIndex: number, maxIndex: number) => number = (prevRightIndex, maxIndex) => {
-  return prevRightIndex < 1 ? maxIndex - RIGHT_START_INDEX : prevRightIndex - 1;
+  return (maxIndex + prevRightIndex - 1) % maxIndex;
 };
 
 const rollingAnimation = css`
@@ -73,7 +73,7 @@ const rollingAnimation = css`
         transform: translateY(0);
       }
       90%, 100% {
-        transform: translateY(-2.6428em);
+        transform: translateY(-2.7143em);
       }
     `} 5s infinite;
 `;
