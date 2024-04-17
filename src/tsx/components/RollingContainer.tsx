@@ -2,54 +2,54 @@ import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { RollingProps } from "./Interfaces";
 
-const LEFT_START_INDEX = 2;
-const RIGHT_START_INDEX = 3;
+const LEFT_START_INDEX = 1;
+const RIGHT_START_INDEX = 2;
 const INTERVAL_DELAY = 5000;
 const TIMEOUT_DELAY = 1000;
-const ITEM_TOP_START = -20;
+const ITEM_TOP_START = 8;
 const ITEM_TOP_INCREMENT = 20;
 
 function RollingContainer({ news }: RollingProps) {
   const [leftIndex, setLeftIndex] = useState<number>(LEFT_START_INDEX);
   const [rightIndex, setRightIndex] = useState<number>(news.length - RIGHT_START_INDEX);
+  const [animateRight, setAnimateRight] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setLeftIndex(toggleLeftIndex(leftIndex, news.length));
     }, INTERVAL_DELAY);
     return () => clearInterval(interval);
-  }, [news.length]);
+  }, [leftIndex, news.length]);
 
   useEffect(() => {
-    if (news.length > 0 && rightIndex < 0) {
-      setTimeout(() => setRightIndex(news.length - RIGHT_START_INDEX), TIMEOUT_DELAY);
+    if (news.length > 0 && rightIndex < 1) {
+      setRightIndex(news.length - RIGHT_START_INDEX);
+      setTimeout(() => setAnimateRight(true), 1000);
       return;
     }
 
     const timer = setTimeout(() => {
-      setRightIndex(toggleRightIndex(rightIndex, news.length));
+      setRightIndex((prevIndex) => toggleRightIndex(prevIndex, news.length));
     }, TIMEOUT_DELAY);
     return () => clearTimeout(timer);
   }, [leftIndex, news.length]);
 
   return (
     <Container>
-      <TextBox key={leftIndex}>
-        {news
-          .slice(leftIndex - 2, leftIndex + 1)
-          .map((element, index) => (
-            <RollingText style={{ top: `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}px` }}>
-              <Press>{element?.pressName}</Press>
-              <Title href={element?.headline?.href}>{element?.headline?.title}</Title>
-            </RollingText>
+      <TextBox>
+        {news.slice(leftIndex - 1, leftIndex + 1).map((element, index) => (
+          <RollingText animate={true} style={{ top: `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}px` }}>
+            <Press>{element?.pressName}</Press>
+            <Title href={element?.headline?.href}>{element?.headline?.title}</Title>
+          </RollingText>
         ))}
       </TextBox>
-      <TextBox key={rightIndex}>
+      <TextBox>
         {news
-          .slice(rightIndex - 1, rightIndex + 2)
+          .slice(rightIndex, rightIndex + 2)
           .reverse()
           .map((element, index) => (
-            <RollingText style={{ top: `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}px` }}>
+            <RollingText animate={animateRight} style={{ top: `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}px` }}>
               <Press>{element?.pressName}</Press>
               <Title href={element?.headline?.href}>{element?.headline?.title}</Title>
             </RollingText>
@@ -69,16 +69,13 @@ const toggleRightIndex: (prevRightIndex: number, maxIndex: number) => number = (
 
 const rollingAnimation = css`
   ${keyframes`
-      0% {
+      0%, 80% {
         transform: translateY(0);
       }
-      90% {
-        transform: translateY(0);
+      90%, 100% {
+        transform: translateY(-2.6428em);
       }
-      100% {
-        transform: translateY(-2.7142em);
-      }
-    `} 5s linear;
+    `} 5s infinite;
 `;
 
 const Container = styled.div`
@@ -98,10 +95,10 @@ const TextBox = styled.div`
   overflow: hidden;
 `;
 
-const RollingText = styled.div`
+const RollingText = styled.div<{ animate: boolean }>`
   position: relative;
   display: flex;
-  animation: ${rollingAnimation};
+  animation: ${(props) => (props.animate ? rollingAnimation : "none")};
 `;
 
 const Press = styled.span`
