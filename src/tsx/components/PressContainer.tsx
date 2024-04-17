@@ -48,13 +48,16 @@ const Menu = styled.ul`
 const PressMenu = styled.li`
   display: flex;
   justify-content: space-between;
-  width: 15.43em;
   font-size: 1.14em;
 `;
 
 const PressTextMenu = styled.span`
   font-weight: 700;
   color: ${(props) => (props["aria-selected"] === true ? "#14212b" : "#879298")};
+
+  & + & {
+    margin-left: 1.7143em;
+  }
 `;
 
 const ViewMenu = styled.li`

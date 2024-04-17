@@ -4,31 +4,31 @@ import { RollingProps } from "./Interfaces";
 
 const LEFT_START_INDEX = 2;
 const RIGHT_START_INDEX = 3;
-const INTERVAL_TIME = 5000;
-const TIMEOUT_TIME = 1000;
+const INTERVAL_DELAY = 5000;
+const TIMEOUT_DELAY = 1000;
 const ITEM_TOP_START = -20;
 const ITEM_TOP_INCREMENT = 20;
 
 function RollingContainer({ news }: RollingProps) {
-  const [leftIndex, setLeftIndex] = useState(LEFT_START_INDEX);
-  const [rightIndex, setRightIndex] = useState(news.length - RIGHT_START_INDEX);
+  const [leftIndex, setLeftIndex] = useState<number>(LEFT_START_INDEX);
+  const [rightIndex, setRightIndex] = useState<number>(news.length - RIGHT_START_INDEX);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setLeftIndex((prevLeftIndex) => (prevLeftIndex === news.length - 1 ? LEFT_START_INDEX : prevLeftIndex + 1));
-    }, INTERVAL_TIME);
+      setLeftIndex(toggleLeftIndex(leftIndex, news.length));
+    }, INTERVAL_DELAY);
     return () => clearInterval(interval);
   }, [news.length]);
 
   useEffect(() => {
     if (news.length > 0 && rightIndex < 0) {
-      setTimeout(() => setRightIndex(news.length - RIGHT_START_INDEX), TIMEOUT_TIME);
+      setTimeout(() => setRightIndex(news.length - RIGHT_START_INDEX), TIMEOUT_DELAY);
       return;
     }
 
     const timer = setTimeout(() => {
-      setRightIndex((prevRightIndex) => (prevRightIndex < 1 ? news.length - RIGHT_START_INDEX : prevRightIndex - 1));
-    }, TIMEOUT_TIME);
+      setRightIndex(toggleRightIndex(rightIndex, news.length));
+    }, TIMEOUT_DELAY);
     return () => clearTimeout(timer);
   }, [leftIndex, news.length]);
 
@@ -58,6 +58,14 @@ function RollingContainer({ news }: RollingProps) {
     </Container>
   );
 }
+
+const toggleLeftIndex: (prevLeftIndex: number, maxIndex: number) => number = (prevLeftIndex, maxIndex) => {
+  return prevLeftIndex === maxIndex - 1 ? LEFT_START_INDEX : prevLeftIndex + 1;
+};
+
+const toggleRightIndex: (prevRightIndex: number, maxIndex: number) => number = (prevRightIndex, maxIndex) => {
+  return prevRightIndex < 1 ? maxIndex - RIGHT_START_INDEX : prevRightIndex - 1;
+};
 
 const rollingAnimation = css`
   ${keyframes`
