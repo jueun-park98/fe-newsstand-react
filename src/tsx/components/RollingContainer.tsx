@@ -114,6 +114,10 @@ const Title = styled.a`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export default RollingContainer;

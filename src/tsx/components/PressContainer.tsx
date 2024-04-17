@@ -4,26 +4,31 @@ import listIcon from "../../img/listIcon.svg";
 import styled from "styled-components";
 
 function PressContainer() {
-  const [selected, setSelected] = useState<number>(0);
+  const [menuSelected, setMenuSelected] = useState<number>(0);
+  const [viewSelected, setViewSelected] = useState<number>(1);
 
-  const toggleSelected: (index: number) => void = (index) => {
-    setSelected(index);
+  const toggleMenuSelected: (index: number) => void = (index) => {
+    setMenuSelected(index);
+  };
+
+  const toggleViewSelected: (index: number) => void = (index) => {
+    setViewSelected(index);
   };
 
   return (
     <Container>
       <Menu>
         <PressMenu>
-          <PressTextMenu aria-selected={selected === 0} onClick={() => toggleSelected(0)}>
+          <PressTextMenu aria-selected={menuSelected === 0} onClick={() => toggleMenuSelected(0)}>
             전체 언론사
           </PressTextMenu>
-          <PressTextMenu aria-selected={selected === 1} onClick={() => toggleSelected(1)}>
+          <PressTextMenu aria-selected={menuSelected === 1} onClick={() => toggleMenuSelected(1)}>
             내가 구독한 언론사
           </PressTextMenu>
         </PressMenu>
         <ViewMenu>
-          <ViewIcon src={listIcon} alt="list-icon"></ViewIcon>
-          <ViewIcon src={gridIcon} alt="grid-icon"></ViewIcon>
+          <ViewIcon aria-selected={viewSelected === 0} onClick={() => toggleViewSelected(0)} src={listIcon} alt="list-icon"></ViewIcon>
+          <ViewIcon aria-selected={viewSelected === 1} onClick={() => toggleViewSelected(1)} src={gridIcon} alt="grid-icon"></ViewIcon>
         </ViewMenu>
       </Menu>
       <View></View>
@@ -57,6 +62,9 @@ const ViewMenu = styled.li`
 `;
 
 const ViewIcon = styled.img`
+  filter: ${(props) => (props["aria-selected"] === true ? "grayscale(0)" : "grayscale(1)")};
+  opacity: ${(props) => (props["aria-selected"] === true ? "1" : "0.7")};
+
   & + & {
     margin-left: 0.57em;
   }
