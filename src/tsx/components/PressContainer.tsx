@@ -3,6 +3,8 @@ import gridIcon from "../../img/gridIcon.svg";
 import listIcon from "../../img/listIcon.svg";
 import styled from "styled-components";
 import { PressProps } from "./Interfaces";
+import GridView from "./GridView";
+import ListView from "./ListView";
 
 function PressContainer({ news, subscriptions }: PressProps) {
   const [menuSelected, setMenuSelected] = useState<number>(0);
@@ -23,12 +25,26 @@ function PressContainer({ news, subscriptions }: PressProps) {
           </PressTextMenu>
         </PressMenu>
         <ViewMenu>
-          <ViewIcon aria-selected={viewSelected === 0} onClick={() => toggleViewSelected(0)} src={listIcon} alt="list-icon"></ViewIcon>
-          <ViewIcon aria-selected={viewSelected === 1} onClick={() => toggleViewSelected(1)} src={gridIcon} alt="grid-icon"></ViewIcon>
+          <ViewIcon
+            aria-selected={viewSelected === 0}
+            onClick={() => toggleViewSelected(0)}
+            src={listIcon}
+            alt="list-icon"
+          ></ViewIcon>
+          <ViewIcon
+            aria-selected={viewSelected === 1}
+            onClick={() => toggleViewSelected(1)}
+            src={gridIcon}
+            alt="grid-icon"
+          ></ViewIcon>
         </ViewMenu>
       </Menu>
       <View>
-
+        {viewSelected === 1 ? (
+          <GridView news={news} subscriptions={subscriptions} menuSelected={menuSelected}></GridView>
+        ) : (
+          <ListView></ListView>
+        )}
       </View>
     </Container>
   );

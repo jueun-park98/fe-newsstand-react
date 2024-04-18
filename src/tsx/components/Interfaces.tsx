@@ -22,3 +22,17 @@ export interface News {
 export interface RollingProps {
   news: News[];
 }
+
+export interface PressProps {
+  news: News[];
+  subscriptions: News[];
+}
+
+export interface ViewProps extends PressProps{
+  menuSelected: number;
+}
+
+export interface LogoState {
+  name: string;
+  src: string;
+}
