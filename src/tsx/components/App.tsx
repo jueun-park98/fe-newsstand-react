@@ -18,7 +18,7 @@ function App() {
     <div className="App">
       <Header></Header>
       <RollingContainer news={news}></RollingContainer>
-      <PressContainer></PressContainer>
+      <PressContainer news={news} subscriptions={subscriptions}></PressContainer>
     </div>
   );
 }

@@ -2,18 +2,14 @@ import React, { useState } from "react";
 import gridIcon from "../../img/gridIcon.svg";
 import listIcon from "../../img/listIcon.svg";
 import styled from "styled-components";
+import { PressProps } from "./Interfaces";
 
-function PressContainer() {
+function PressContainer({ news, subscriptions }: PressProps) {
   const [menuSelected, setMenuSelected] = useState<number>(0);
   const [viewSelected, setViewSelected] = useState<number>(1);
 
-  const toggleMenuSelected: (index: number) => void = (index) => {
-    setMenuSelected(index);
-  };
-
-  const toggleViewSelected: (index: number) => void = (index) => {
-    setViewSelected(index);
-  };
+  const toggleMenuSelected: (index: number) => void = (index) => setMenuSelected(index);
+  const toggleViewSelected: (index: number) => void = (index) => setViewSelected(index);
 
   return (
     <Container>
@@ -31,7 +27,9 @@ function PressContainer() {
           <ViewIcon aria-selected={viewSelected === 1} onClick={() => toggleViewSelected(1)} src={gridIcon} alt="grid-icon"></ViewIcon>
         </ViewMenu>
       </Menu>
-      <View></View>
+      <View>
+
+      </View>
     </Container>
   );
 }
