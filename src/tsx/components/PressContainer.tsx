@@ -17,10 +17,16 @@ function PressContainer({ news, subscriptions }: PressProps) {
     <Container>
       <Menu>
         <PressMenu>
-          <PressTextMenu aria-selected={menuSelected === MENU_STATES.allPress} onClick={() => toggleMenuSelected(MENU_STATES.allPress)}>
+          <PressTextMenu
+            aria-selected={menuSelected === MENU_STATES.allPress}
+            onClick={() => toggleMenuSelected(MENU_STATES.allPress)}
+          >
             전체 언론사
           </PressTextMenu>
-          <PressTextMenu aria-selected={menuSelected === MENU_STATES.subscribedPress} onClick={() => toggleMenuSelected(MENU_STATES.subscribedPress)}>
+          <PressTextMenu
+            aria-selected={menuSelected === MENU_STATES.subscribedPress}
+            onClick={() => toggleMenuSelected(MENU_STATES.subscribedPress)}
+          >
             내가 구독한 언론사
           </PressTextMenu>
         </PressMenu>
@@ -43,7 +49,7 @@ function PressContainer({ news, subscriptions }: PressProps) {
         {viewSelected === VIEW_STATES.grid ? (
           <GridView news={news} subscriptions={subscriptions} menuSelected={menuSelected}></GridView>
         ) : (
-          <ListView></ListView>
+          <ListView news={news} subscriptions={subscriptions} menuSelected={menuSelected}></ListView>
         )}
       </View>
     </Container>

@@ -28,7 +28,7 @@ export interface PressProps {
   subscriptions: News[];
 }
 
-export interface ViewProps extends PressProps{
+export interface ViewProps extends PressProps {
   menuSelected: string;
 }
 
@@ -45,4 +45,4 @@ export const MENU_STATES = {
 export const VIEW_STATES = {
   grid: "GRID",
   list: "LIST",
-}
+};

@@ -3,6 +3,7 @@ import { LogoState, MENU_STATES, News, ViewProps } from "./constants";
 import leftArrow from "../../img/leftArrow.svg";
 import rightArrow from "../../img/rightArrow.svg";
 import styled from "styled-components";
+import { decreaseIndex, increaseIndex } from "../utils/Utils";
 
 const MAX_PAGE = 4;
 const LOGO_COUNT_PER_PAGE = 24;
@@ -32,21 +33,19 @@ function GridView({ news, subscriptions, menuSelected }: ViewProps) {
           <Logo src={logo.src} name={logo.name}></Logo>
         </LogoBox>
       ))}
-      <LeftArrow page={page} src={leftArrow} onClick={() => setPage(page - 1)} />
-      <RightArrow page={page} src={rightArrow} onClick={() => setPage(page + 1)} />
+      <LeftArrow page={page} src={leftArrow} onClick={() => setPage(decreaseIndex(page, MAX_PAGE))} />
+      <RightArrow page={page} src={rightArrow} onClick={() => setPage(increaseIndex(page, MAX_PAGE))} />
     </Table>
   );
 }
 
 const shuffle: (array: News[]) => LogoState[] = (array) => {
-  return [...array]
-    .sort((a, b) => Math.random() - 0.5)
-    .map(convertToLogo);
+  return [...array].sort((a, b) => Math.random() - 0.5).map(convertToLogo);
 };
 
 const convertToLogo: (news: News) => LogoState = (news) => {
-  return ({ src: news.logoImageSrc, name: news.pressName });
-}
+  return { src: news.logoImageSrc, name: news.pressName };
+};
 
 const Table = styled.div`
   width: 100%;

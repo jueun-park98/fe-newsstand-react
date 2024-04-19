@@ -20,7 +20,6 @@ function Header() {
   );
 }
 
-
 const reloadPage = () => window.location.reload();
 
 const renderCurrentDate = () => {

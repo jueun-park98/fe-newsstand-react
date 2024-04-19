@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { RollingProps } from "./constants";
+import { increaseIndex, decreaseIndex } from "../utils/Utils";
 
 const LEFT_START_INDEX = 1;
 const RIGHT_START_INDEX = 2;
@@ -16,7 +17,7 @@ function RollingContainer({ news }: RollingProps) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setLeftIndex(toggleLeftIndex(leftIndex, news.length));
+      setLeftIndex(increaseIndex(leftIndex, news.length));
     }, INTERVAL_DELAY);
     return () => clearInterval(interval);
   }, [leftIndex, news.length]);
@@ -29,7 +30,7 @@ function RollingContainer({ news }: RollingProps) {
     }
 
     const timer = setTimeout(() => {
-      setRightIndex((prevIndex) => toggleRightIndex(prevIndex, news.length));
+      setRightIndex((prevIndex) => decreaseIndex(prevIndex, news.length));
     }, TIMEOUT_DELAY);
     return () => clearTimeout(timer);
   }, [leftIndex, news.length]);
@@ -58,14 +59,6 @@ function RollingContainer({ news }: RollingProps) {
     </Container>
   );
 }
-
-const toggleLeftIndex: (prevLeftIndex: number, maxIndex: number) => number = (prevLeftIndex, maxIndex) => {
-  return (prevLeftIndex + 1) % maxIndex;
-};
-
-const toggleRightIndex: (prevRightIndex: number, maxIndex: number) => number = (prevRightIndex, maxIndex) => {
-  return (maxIndex + prevRightIndex - 1) % maxIndex;
-};
 
 const rollingAnimation = css`
   ${keyframes`
