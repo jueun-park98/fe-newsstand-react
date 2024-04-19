@@ -29,10 +29,20 @@ export interface PressProps {
 }
 
 export interface ViewProps extends PressProps{
-  menuSelected: number;
+  menuSelected: string;
 }
 
 export interface LogoState {
   name: string;
   src: string;
+}
+
+export const MENU_STATES = {
+  allPress: "ALL_PRESS",
+  subscribedPress: "SUBSCRIBED_PRESS",
+};
+
+export const VIEW_STATES = {
+  grid: "GRID",
+  list: "LIST",
 }

@@ -2,45 +2,45 @@ import React, { useState } from "react";
 import gridIcon from "../../img/gridIcon.svg";
 import listIcon from "../../img/listIcon.svg";
 import styled from "styled-components";
-import { PressProps } from "./Interfaces";
+import { MENU_STATES, PressProps, VIEW_STATES } from "./constants";
 import GridView from "./GridView";
 import ListView from "./ListView";
 
 function PressContainer({ news, subscriptions }: PressProps) {
-  const [menuSelected, setMenuSelected] = useState<number>(0);
-  const [viewSelected, setViewSelected] = useState<number>(1);
+  const [menuSelected, setMenuSelected] = useState<string>(MENU_STATES.allPress);
+  const [viewSelected, setViewSelected] = useState<string>(VIEW_STATES.grid);
 
-  const toggleMenuSelected: (index: number) => void = (index) => setMenuSelected(index);
-  const toggleViewSelected: (index: number) => void = (index) => setViewSelected(index);
+  const toggleMenuSelected: (state: string) => void = (state) => setMenuSelected(state);
+  const toggleViewSelected: (state: string) => void = (state) => setViewSelected(state);
 
   return (
     <Container>
       <Menu>
         <PressMenu>
-          <PressTextMenu aria-selected={menuSelected === 0} onClick={() => toggleMenuSelected(0)}>
+          <PressTextMenu aria-selected={menuSelected === MENU_STATES.allPress} onClick={() => toggleMenuSelected(MENU_STATES.allPress)}>
             전체 언론사
           </PressTextMenu>
-          <PressTextMenu aria-selected={menuSelected === 1} onClick={() => toggleMenuSelected(1)}>
+          <PressTextMenu aria-selected={menuSelected === MENU_STATES.subscribedPress} onClick={() => toggleMenuSelected(MENU_STATES.subscribedPress)}>
             내가 구독한 언론사
           </PressTextMenu>
         </PressMenu>
         <ViewMenu>
           <ViewIcon
-            aria-selected={viewSelected === 0}
-            onClick={() => toggleViewSelected(0)}
+            aria-selected={viewSelected === VIEW_STATES.list}
+            onClick={() => toggleViewSelected(VIEW_STATES.list)}
             src={listIcon}
             alt="list-icon"
           ></ViewIcon>
           <ViewIcon
-            aria-selected={viewSelected === 1}
-            onClick={() => toggleViewSelected(1)}
+            aria-selected={viewSelected === VIEW_STATES.grid}
+            onClick={() => toggleViewSelected(VIEW_STATES.grid)}
             src={gridIcon}
             alt="grid-icon"
           ></ViewIcon>
         </ViewMenu>
       </Menu>
       <View>
-        {viewSelected === 1 ? (
+        {viewSelected === VIEW_STATES.grid ? (
           <GridView news={news} subscriptions={subscriptions} menuSelected={menuSelected}></GridView>
         ) : (
           <ListView></ListView>

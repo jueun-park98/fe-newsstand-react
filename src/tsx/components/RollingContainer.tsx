@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { RollingProps } from "./Interfaces";
+import { RollingProps } from "./constants";
 
 const LEFT_START_INDEX = 1;
 const RIGHT_START_INDEX = 2;

@@ -4,7 +4,7 @@ import Header from "./Header";
 import RollingContainer from "./RollingContainer";
 import PressContainer from "./PressContainer";
 import { fetchNews } from "../api/NewsAPI";
-import { News } from "./Interfaces";
+import { News } from "./constants";
 
 function App() {
   const [news, setNews] = useState<News[]>([]);

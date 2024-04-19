@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LogoState, News, ViewProps } from "./Interfaces";
+import { LogoState, MENU_STATES, News, ViewProps } from "./constants";
 import leftArrow from "../../img/leftArrow.svg";
 import rightArrow from "../../img/rightArrow.svg";
 import styled from "styled-components";
@@ -13,11 +13,11 @@ function GridView({ news, subscriptions, menuSelected }: ViewProps) {
   const [logos, setLogos] = useState<LogoState[]>([]);
 
   useEffect(() => {
-    if (menuSelected === 0) {
+    if (menuSelected === MENU_STATES.allPress) {
       const logosToSave = shuffle(news).slice(0, MAX_PAGE * LOGO_COUNT_PER_PAGE);
       setLogos(logosToSave);
     }
-    if (menuSelected === 1) {
+    if (menuSelected === MENU_STATES.subscribedPress) {
       const logosToSave = subscriptions.map(convertToLogo);
       setLogos(logosToSave);
     }
