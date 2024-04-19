@@ -24,8 +24,6 @@ function GridView({ news, subscriptions, menuSelected }: ViewProps) {
     }
   }, [news.length, menuSelected]);
 
-  useEffect(() => {});
-
   return (
     <Table>
       {logos.slice(page * LOGO_COUNT_PER_PAGE, (page + 1) * LOGO_COUNT_PER_PAGE).map((logo) => (
