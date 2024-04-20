@@ -46,19 +46,19 @@ function RollingContainer({ news }: RollingProps) {
       <TextBox>
         {news
           .slice(leftIndex - 1, leftIndex + 1)
-          .map((element, index) => renderHeadline(element, index, animateLeft, setAnimateLeft))}
+          .map((element, index) => renderRollingText(element, index, animateLeft, setAnimateLeft))}
       </TextBox>
       <TextBox>
         {news
           .slice(rightIndex, rightIndex + 2)
           .reverse()
-          .map((element, index) => renderHeadline(element, index, animateRight, setAnimateRight))}
+          .map((element, index) => renderRollingText(element, index, animateRight, setAnimateRight))}
       </TextBox>
     </Container>
   );
 }
 
-const renderHeadline = (
+const renderRollingText = (
   news: News,
   index: number,
   animate: boolean,

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../../css/App.css";
 import Header from "./Header";
 import RollingContainer from "./RollingContainer";
 import PressContainer from "./PressContainer";
@@ -15,7 +14,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div>
       <Header></Header>
       <RollingContainer news={news}></RollingContainer>
       <PressContainer news={news} subscriptions={subscriptions}></PressContainer>

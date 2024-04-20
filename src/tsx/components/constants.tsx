@@ -19,6 +19,10 @@ export interface News {
   sideNews: Sidenews[];
 }
 
+export interface NewsProps {
+  newsItem: News;
+}
+
 export interface RollingProps {
   news: News[];
 }

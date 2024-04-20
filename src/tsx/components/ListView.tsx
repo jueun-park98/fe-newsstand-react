@@ -1,57 +1,91 @@
 import styled from "styled-components";
 import leftArrow from "../../img/leftArrow.svg";
 import rightArrow from "../../img/rightArrow.svg";
-import { ViewProps } from "./constants";
+import { News, ViewProps } from "./constants";
 import { useEffect, useState } from "react";
 import { decreaseIndex, increaseIndex } from "../utils/Utils";
+import DetailedNews from './DetailedNews';
 
 function ListView({ news, subscriptions, menuSelected }: ViewProps) {
   const [page, setPage] = useState<number>(0);
   const [subscriptionPage, setSubscriptionPage] = useState<number>(0);
-  const categories = Array.from(
+  const [progress, setProgress] = useState<number>(0);
+  const categories = getCategories(news);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress >= 100) {
+          clearInterval(interval);
+          setPage((page + 1) % news.length);
+          return 0;
+        }
+        return prevProgress + 0.01;
+      });
+    }, 2);
+
+    return () => clearInterval(interval);
+  }, [page]);
+
+  useEffect(() => {
+    setProgress(0);
+  }, [page]);
+
+  return (
+    <Container>
+      <TabBlock>
+        {categories.map(([category, { firstIndex, count }]) =>
+          isInRagne(page, firstIndex, count) ? (
+            <ActiveTab>
+              <ProgressBar progress={progress}></ProgressBar>
+              <TabDescription>
+                <div>{category}</div>
+                <div>
+                  {page - firstIndex + 1} / <span style={{ opacity: 0.7 }}>{count}</span>
+                </div>
+              </TabDescription>
+            </ActiveTab>
+          ) : (
+            <InactiveTab onClick={() => setPage(firstIndex)}>{category}</InactiveTab>
+          )
+        )}
+      </TabBlock>
+      <DetailedNews newsItem={news[page]}>
+      </DetailedNews>
+      <LeftArrow
+        src={leftArrow}
+        onClick={() => setPage(decreaseIndex(page, news.length))}
+      ></LeftArrow>
+      <RightArrow
+        src={rightArrow}
+        onClick={() => setPage(increaseIndex(page, news.length))}
+      ></RightArrow>
+    </Container>
+  );
+}
+
+const getCategories: (news: News[]) => [string, { firstIndex: number; count: number }][] = (
+  news
+) => {
+  return Array.from(
     news.reduce((acc, cur, index) => {
       if (!acc.has(cur.category)) {
         acc.set(cur.category, { firstIndex: index, count: 1 });
         return acc;
       }
       const current = acc.get(cur.category);
-      if (current) acc.set(cur.category, { firstIndex: current?.firstIndex, count: current.count + 1 });
+      if (current)
+        acc.set(cur.category, { firstIndex: current?.firstIndex, count: current.count + 1 });
       return acc;
     }, new Map<string, { firstIndex: number; count: number }>())
   );
+};
 
-  return (
-    <Container>
-      <TabBlock>
-        {categories.map(([category, details]) => 
-        
-        (
-          <InactiveTab onClick={() => setPage(details.firstIndex)}>{category}</InactiveTab>
-        ))}
-      </TabBlock>
-      <DetailedNews>
-        <NewsInfo>
-          <img src={news[page].logoImageSrc} alt="logo" />
-          <EditedTime>{news[page].editedTime}</EditedTime>
-        </NewsInfo>
-        <NewsContent>
-          <Headline>
-            <Thumbnail src={news[page].headline.thumbnailSrc}></Thumbnail>
-            <HeadlineTitle href={news[page].headline.href}>{news[page].headline.title}</HeadlineTitle>
-          </Headline>
-          <Sidenews>
-            {news[page].sideNews.map((element) => (
-              <SideNewsTitle href={element.href}>{element.title}</SideNewsTitle>
-            ))}
-            <span>{news[page].pressName} 언론사에서 직접 편집한 뉴스입니다.</span>
-          </Sidenews>
-        </NewsContent>
-      </DetailedNews>
-      <LeftArrow src={leftArrow} onClick={() => setPage(decreaseIndex(page, news.length))}></LeftArrow>
-      <RightArrow src={rightArrow} onClick={() => setPage(increaseIndex(page, news.length))}></RightArrow>
-    </Container>
-  );
-}
+const isInRagne: (index: number, minIndex: number, count: number) => boolean = (
+  index,
+  minIndex,
+  count
+) => index >= minIndex && index < minIndex + count;
 
 const Container = styled.div`
   width: 100%;
@@ -72,7 +106,7 @@ const TabBlock = styled.div`
 `;
 
 const ActiveTab = styled.div`
-  width: 166px;
+  width: 180px;
   background-color: #7890e7;
   color: #fff;
   font-weight: 700;
@@ -102,8 +136,14 @@ const InactiveTab = styled.div`
   }
 `;
 
+const Progress = styled.div`
+  width: 0%;
+  height: 40px;
+  background-color: #4362d0;
+`;
+
 const TabDescription = styled.div`
-  width: 134px;
+  width: 82%;
   height: 40px;
   position: relative;
   top: -40px;
@@ -115,97 +155,6 @@ const TabDescription = styled.div`
   > div::selection {
     background-color: transparent;
     color: inherit;
-  }
-`;
-
-const DetailedNews = styled.div`
-  height: 300px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const NewsInfo = styled.div`
-  display: flex;
-  align-items: center;
-
-  > img {
-    height: 20px;
-  }
-`;
-
-const EditedTime = styled.div`
-  color: #5f6e76;
-  font-size: 12px;
-  font-weight: var(--def-font-weight);
-  margin-left: 16px;
-`;
-
-const NewsContent = styled.div`
-  display: flex;
-`;
-
-const Headline = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 320px;
-  padding-right: 32px;
-`;
-
-const Thumbnail = styled.img`
-  width: 320px;
-  height: 200px;
-
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-    transition: transform 0.35s;
-  }
-`;
-
-const HeadlineTitle = styled.a<{}>`
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  height: 38.75px;
-  font-size: 16px;
-  margin-top: 16px;
-  color: #14212b;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: normal;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const Sidenews = styled.div`
-  height: 245px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  white-space: nowrap;
-  overflow: hidden;
-
-  > span {
-    font-weight: 500;
-    color: #879298;
-  }
-`;
-
-const SideNewsTitle = styled.a`
-  font-size: 16px;
-  font-weight: 500;
-  color: #4b5966;
-  text-decoration-line: none;
-  text-overflow: ellipsis;
-  overflow: hidden;
-
-  &:hover {
-    text-decoration: underline;
   }
 `;
 

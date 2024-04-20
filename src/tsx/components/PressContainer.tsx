@@ -10,22 +10,19 @@ function PressContainer({ news, subscriptions }: PressProps) {
   const [menuSelected, setMenuSelected] = useState<string>(MENU_STATES.allPress);
   const [viewSelected, setViewSelected] = useState<string>(VIEW_STATES.grid);
 
-  const toggleMenuSelected: (state: string) => void = (state) => setMenuSelected(state);
-  const toggleViewSelected: (state: string) => void = (state) => setViewSelected(state);
-
   return (
     <Container>
       <Menu>
         <PressMenu>
           <PressTextMenu
             aria-selected={menuSelected === MENU_STATES.allPress}
-            onClick={() => toggleMenuSelected(MENU_STATES.allPress)}
+            onClick={() => setMenuSelected(MENU_STATES.allPress)}
           >
             전체 언론사
           </PressTextMenu>
           <PressTextMenu
             aria-selected={menuSelected === MENU_STATES.subscribedPress}
-            onClick={() => toggleMenuSelected(MENU_STATES.subscribedPress)}
+            onClick={() => setMenuSelected(MENU_STATES.subscribedPress)}
           >
             내가 구독한 언론사
           </PressTextMenu>
@@ -33,13 +30,13 @@ function PressContainer({ news, subscriptions }: PressProps) {
         <ViewMenu>
           <ViewIcon
             aria-selected={viewSelected === VIEW_STATES.list}
-            onClick={() => toggleViewSelected(VIEW_STATES.list)}
+            onClick={() => setViewSelected(VIEW_STATES.list)}
             src={listIcon}
             alt="list-icon"
           ></ViewIcon>
           <ViewIcon
             aria-selected={viewSelected === VIEW_STATES.grid}
-            onClick={() => toggleViewSelected(VIEW_STATES.grid)}
+            onClick={() => setViewSelected(VIEW_STATES.grid)}
             src={gridIcon}
             alt="grid-icon"
           ></ViewIcon>
