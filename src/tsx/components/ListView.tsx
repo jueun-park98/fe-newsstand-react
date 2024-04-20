@@ -50,8 +50,7 @@ function ListView({ news, subscriptions, menuSelected }: ViewProps) {
           )
         )}
       </TabBlock>
-      <DetailedNews newsItem={news[page]}>
-      </DetailedNews>
+      <DetailedNews newsItem={news[page]} />
       <LeftArrow
         src={leftArrow}
         onClick={() => setPage(decreaseIndex(page, news.length))}
@@ -134,12 +133,6 @@ const InactiveTab = styled.div`
     background-color: transparent;
     color: inherit;
   }
-`;
-
-const Progress = styled.div`
-  width: 0%;
-  height: 40px;
-  background-color: #4362d0;
 `;
 
 const TabDescription = styled.div`

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 import { NewsProps } from "./constants";
 
 function DetailedNews({ newsItem }: NewsProps) {
@@ -25,8 +25,8 @@ function DetailedNews({ newsItem }: NewsProps) {
 }
 
 const Container = styled.div`
-  height: 300px;
-  padding: 24px;
+  height: 21.4286em;
+  padding: 1.7143em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -37,15 +37,15 @@ const NewsInfo = styled.div`
   align-items: center;
 
   > img {
-    height: 20px;
+    height: 1.4286em;
   }
 `;
 
 const EditedTime = styled.div`
   color: #5f6e76;
-  font-size: 12px;
-  font-weight: var(--def-font-weight);
-  margin-left: 16px;
+  font-size: 0.8571em;
+  font-weight: 500;
+  margin-left: 1.1429em;
 `;
 
 const NewsContent = styled.div`
@@ -56,13 +56,13 @@ const Headline = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 320px;
-  padding-right: 32px;
+  width: 22.8571em;
+  padding-right: 2.2857em;
 `;
 
 const Thumbnail = styled.img`
-  width: 320px;
-  height: 200px;
+  width: 22.8571em;
+  height: 14.2857em;
 
   &:hover {
     cursor: pointer;
@@ -71,13 +71,13 @@ const Thumbnail = styled.img`
   }
 `;
 
-const HeadlineTitle = styled.a<{}>`
+const HeadlineTitle = styled.a`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  height: 38.75px;
-  font-size: 16px;
-  margin-top: 16px;
+  height: 2.7679em;
+  font-size: 1.1429em;
+  margin-top: 1.1429em;
   color: #14212b;
   text-decoration: none;
   text-overflow: ellipsis;
@@ -89,7 +89,7 @@ const HeadlineTitle = styled.a<{}>`
 `;
 
 const Sidenews = styled.div`
-  height: 245px;
+  height: 17.5em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -103,7 +103,7 @@ const Sidenews = styled.div`
 `;
 
 const SideNewsTitle = styled.a`
-  font-size: 16px;
+  font-size: 1.1429em;
   font-weight: 500;
   color: #4b5966;
   text-decoration-line: none;
