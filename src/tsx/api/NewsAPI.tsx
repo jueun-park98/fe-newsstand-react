@@ -1,4 +1,4 @@
-const SERVER = "http://localhost:3000";
+const SERVER = process.env.REACT_APP_SERVER;
 
 export const fetchNews: () => Promise<object[]> = async () => {
   const request = {

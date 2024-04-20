@@ -22,7 +22,7 @@ app.use("/news", newsRouter);
 app.use("/subscription", subscriptionRouter);
 
 mongoose
-  .connect(`mongodb://localhost:27017/newsstand`, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
