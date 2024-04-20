@@ -1,74 +1,84 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { RollingProps } from "./constants";
+import { News, RollingProps } from "./constants";
 import { increaseIndex, decreaseIndex } from "../utils/Utils";
 
 const LEFT_START_INDEX = 1;
 const RIGHT_START_INDEX = 2;
 const INTERVAL_DELAY = 5000;
 const TIMEOUT_DELAY = 1000;
-const ITEM_TOP_START = 8;
-const ITEM_TOP_INCREMENT = 20;
+const ITEM_TOP_START = 0.5714;
+const ITEM_TOP_END = -2.0714;
+const ITEM_TOP_INCREMENT = 1.4286;
 
 function RollingContainer({ news }: RollingProps) {
   const [leftIndex, setLeftIndex] = useState<number>(LEFT_START_INDEX);
   const [rightIndex, setRightIndex] = useState<number>(news.length - RIGHT_START_INDEX);
+  const [animateLeft, setAnimateLeft] = useState<boolean>(false);
   const [animateRight, setAnimateRight] = useState<boolean>(false);
 
+  const updateLeftStates = () => {
+    setLeftIndex(increaseIndex(leftIndex, news.length));
+    setAnimateLeft(true);
+  };
+  const updateRightStates = () => {
+    setRightIndex((prevIndex) => decreaseIndex(prevIndex, news.length));
+    setAnimateRight(true);
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLeftIndex(increaseIndex(leftIndex, news.length));
-    }, INTERVAL_DELAY);
-    return () => clearInterval(interval);
+    const timer = setTimeout(updateLeftStates, INTERVAL_DELAY);
+    return () => clearTimeout(timer);
   }, [leftIndex, news.length]);
 
   useEffect(() => {
     if (news.length > 0 && rightIndex < 1) {
       setRightIndex(news.length - RIGHT_START_INDEX);
-      setTimeout(() => setAnimateRight(true), 1000);
       return;
     }
 
-    const timer = setTimeout(() => {
-      setRightIndex((prevIndex) => decreaseIndex(prevIndex, news.length));
-    }, TIMEOUT_DELAY);
+    const timer = setTimeout(updateRightStates, TIMEOUT_DELAY);
     return () => clearTimeout(timer);
   }, [leftIndex, news.length]);
 
   return (
     <Container>
       <TextBox>
-        {news.slice(leftIndex - 1, leftIndex + 1).map((element, index) => (
-          <RollingText animate={true} style={{ top: `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}px` }}>
-            <Press>{element?.pressName}</Press>
-            <Title href={element?.headline?.href}>{element?.headline?.title}</Title>
-          </RollingText>
-        ))}
+        {news
+          .slice(leftIndex - 1, leftIndex + 1)
+          .map((element, index) => renderHeadline(element, index, animateLeft, setAnimateLeft))}
       </TextBox>
       <TextBox>
         {news
           .slice(rightIndex, rightIndex + 2)
           .reverse()
-          .map((element, index) => (
-            <RollingText animate={animateRight} style={{ top: `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}px` }}>
-              <Press>{element?.pressName}</Press>
-              <Title href={element?.headline?.href}>{element?.headline?.title}</Title>
-            </RollingText>
-          ))}
+          .map((element, index) => renderHeadline(element, index, animateRight, setAnimateRight))}
       </TextBox>
     </Container>
   );
 }
 
-const rollingAnimation = css`
-  ${keyframes`
-      0%, 80% {
-        transform: translateY(0);
-      }
-      90%, 100% {
-        transform: translateY(-2.7143em);
-      }
-    `} 5s infinite;
+const renderHeadline = (
+  news: News,
+  index: number,
+  animate: boolean,
+  setAnimationState: (state: boolean) => void
+) => {
+  return (
+    <RollingText animate={animate} index={index} onAnimationEnd={() => setAnimationState(false)}>
+      <Press>{news.pressName}</Press>
+      <Title href={news.headline.href}>{news.headline.title}</Title>
+    </RollingText>
+  );
+};
+
+const rollingAnimation = keyframes`
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2.6428em);
+  }
 `;
 
 const Container = styled.div`
@@ -83,15 +93,24 @@ const TextBox = styled.div`
   justify-content: center;
   width: 32.85em;
   height: 3.43em;
-  border: 1px solid #d2dae0;
+  border: 0.0714em solid #d2dae0;
   background-color: #f5f7f9;
   overflow: hidden;
 `;
 
-const RollingText = styled.div<{ animate: boolean }>`
+const RollingText = styled.div<{ animate: boolean; index: number }>`
   position: relative;
   display: flex;
-  animation: ${(props) => (props.animate ? rollingAnimation : "none")};
+  ${({ animate }) =>
+    animate &&
+    css`
+      animation: ${rollingAnimation} 0.5s ease-out;
+      animation-fill-mode: forwards;
+    `};
+  top: ${({ animate, index }) =>
+    animate
+      ? `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}em;`
+      : `${ITEM_TOP_END + ITEM_TOP_INCREMENT * index}em;`};
 `;
 
 const Press = styled.span`
