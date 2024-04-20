@@ -1,43 +1,37 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import leftArrow from "../../img/leftArrow.svg";
 import rightArrow from "../../img/rightArrow.svg";
 import { News, ViewProps } from "./constants";
 import { useEffect, useState } from "react";
 import { decreaseIndex, increaseIndex } from "../utils/Utils";
-import DetailedNews from './DetailedNews';
+import DetailedNews from "./DetailedNews";
 
 function ListView({ news, subscriptions, menuSelected }: ViewProps) {
   const [page, setPage] = useState<number>(0);
   const [subscriptionPage, setSubscriptionPage] = useState<number>(0);
-  const [progress, setProgress] = useState<number>(0);
+  const [animateProgress, setAnimateProgress] = useState<boolean>(true);
   const categories = getCategories(news);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          clearInterval(interval);
-          setPage((page + 1) % news.length);
-          return 0;
-        }
-        return prevProgress + 0.01;
-      });
-    }, 2);
-
-    return () => clearInterval(interval);
-  }, [page]);
+  const increasePage = () => {
+    setAnimateProgress(false);
+    setPage(increaseIndex(page, news.length));
+  };
+  const decreasePage = () => {
+    setAnimateProgress(false);
+    setPage(decreaseIndex(page, news.length));
+  };
 
   useEffect(() => {
-    setProgress(0);
+    setAnimateProgress(true);
   }, [page]);
 
   return (
     <Container>
       <TabBlock>
         {categories.map(([category, { firstIndex, count }]) =>
-          isInRagne(page, firstIndex, count) ? (
+          isInRange(page, firstIndex, count) ? (
             <ActiveTab>
-              <ProgressBar progress={progress}></ProgressBar>
+              <ProgressBar animate={animateProgress} onAnimationIteration={increasePage}></ProgressBar>
               <TabDescription>
                 <div>{category}</div>
                 <div>
@@ -51,14 +45,8 @@ function ListView({ news, subscriptions, menuSelected }: ViewProps) {
         )}
       </TabBlock>
       <DetailedNews newsItem={news[page]} />
-      <LeftArrow
-        src={leftArrow}
-        onClick={() => setPage(decreaseIndex(page, news.length))}
-      ></LeftArrow>
-      <RightArrow
-        src={rightArrow}
-        onClick={() => setPage(increaseIndex(page, news.length))}
-      ></RightArrow>
+      <LeftArrow src={leftArrow} onClick={decreasePage}></LeftArrow>
+      <RightArrow src={rightArrow} onClick={increasePage}></RightArrow>
     </Container>
   );
 }
@@ -80,11 +68,20 @@ const getCategories: (news: News[]) => [string, { firstIndex: number; count: num
   );
 };
 
-const isInRagne: (index: number, minIndex: number, count: number) => boolean = (
+const isInRange: (index: number, minIndex: number, count: number) => boolean = (
   index,
   minIndex,
   count
 ) => index >= minIndex && index < minIndex + count;
+
+const increaseWidth = keyframes`
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -111,10 +108,14 @@ const ActiveTab = styled.div`
   font-weight: 700;
 `;
 
-const ProgressBar = styled.div<{ progress: number }>`
-  width: ${(props) => props.progress}%;
+const ProgressBar = styled.div<{ animate: boolean }>`
   height: 40px;
   background-color: #4362d0;
+  ${({ animate }) =>
+    animate &&
+    css`
+      animation: ${increaseWidth} 20s infinite linear;
+    `};
 `;
 
 const InactiveTab = styled.div`
