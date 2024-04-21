@@ -31,8 +31,16 @@ function GridView({ news, subscriptions, menuSelected }: ViewProps) {
           <Logo src={logo.src} name={logo.name}></Logo>
         </LogoBox>
       ))}
-      <LeftArrow page={page} src={leftArrow} onClick={() => setPage(decreaseIndex(page, MAX_PAGE))} />
-      <RightArrow page={page} src={rightArrow} onClick={() => setPage(increaseIndex(page, MAX_PAGE))} />
+      <LeftArrow
+        page={page}
+        src={leftArrow}
+        onClick={() => setPage(decreaseIndex(page, MAX_PAGE))}
+      />
+      <RightArrow
+        page={page}
+        src={rightArrow}
+        onClick={() => setPage(increaseIndex(page, MAX_PAGE))}
+      />
     </Table>
   );
 }
@@ -53,28 +61,28 @@ const Table = styled.div`
 `;
 
 const LogoBox = styled.div`
-  height: 95px;
+  height: 6.7857em;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #d2dae0;
+  border: 0.0714em solid #d2dae0;
 `;
 
 const Logo = styled.img<{ name: string }>`
-  height: 20px;
+  height: 1.4286em;
 `;
 
 const LeftArrow = styled.img<{ page: number }>`
   position: relative;
-  top: -211px;
-  left: -100px;
+  top: -15.0714em;
+  left: -7.1429em;
   visibility: ${(props) => (props.page === 0 ? "hidden" : "visible")};
 `;
 
 const RightArrow = styled.img<{ page: number }>`
   position: relative;
-  top: -211px;
-  left: 860px;
+  top: -15.0714em;
+  left: 61.4286em;
   visibility: ${(props) => (props.page === MAX_PAGE - 1 ? "hidden" : "visible")};
 `;
 

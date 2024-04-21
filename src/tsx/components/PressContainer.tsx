@@ -77,7 +77,7 @@ const PressMenu = styled.li`
 
 const PressTextMenu = styled.span`
   font-weight: 700;
-  color: ${(props) => (props["aria-selected"] === true ? "#14212b" : "#879298")};
+  color: ${(props) => (props["aria-selected"] ? "#14212b" : "#879298")};
 
   & + & {
     margin-left: 1.7143em;
@@ -89,8 +89,8 @@ const ViewMenu = styled.li`
 `;
 
 const ViewIcon = styled.img`
-  filter: ${(props) => (props["aria-selected"] === true ? "grayscale(0)" : "grayscale(1)")};
-  opacity: ${(props) => (props["aria-selected"] === true ? "1" : "0.7")};
+  filter: ${(props) => (props["aria-selected"] ? "grayscale(0)" : "grayscale(1)")};
+  opacity: ${(props) => (props["aria-selected"] ? "1" : "0.7")};
 
   & + & {
     margin-left: 0.57em;

@@ -89,7 +89,7 @@ const Container = styled.div`
 `;
 
 const TabBlock = styled.div`
-  height: 40px;
+  height: 2.8571em;
   background-color: #f5f7f9;
   border-bottom: 0.0714em solid rgb(210, 218, 224);
   display: flex;
@@ -102,14 +102,14 @@ const TabBlock = styled.div`
 `;
 
 const ActiveTab = styled.div`
-  width: 180px;
+  width: 12.8571em;
   background-color: #7890e7;
   color: #fff;
   font-weight: 700;
 `;
 
 const ProgressBar = styled.div<{ animate: boolean }>`
-  height: 40px;
+  height: 2.8571em;
   background-color: #4362d0;
   ${({ animate }) =>
     animate &&
@@ -119,8 +119,8 @@ const ProgressBar = styled.div<{ animate: boolean }>`
 `;
 
 const InactiveTab = styled.div`
-  height: 40px;
-  padding: 0 16px;
+  height: 2.8571em;
+  padding: 0 1.1428em;
   display: flex;
   align-items: center;
   color: #879298;
@@ -138,12 +138,12 @@ const InactiveTab = styled.div`
 
 const TabDescription = styled.div`
   width: 82%;
-  height: 40px;
+  height: 2.8571em;
   position: relative;
-  top: -40px;
+  top: -2.8571em;
   justify-content: space-between;
   display: flex;
-  padding: 0px 16px;
+  padding: 0 1.1428em;
   align-items: center;
 
   > div::selection {
@@ -154,15 +154,15 @@ const TabDescription = styled.div`
 
 const LeftArrow = styled.img`
   position: relative;
-  top: -211px;
-  left: -100px;
+  top: -15.0714em;
+  left: -7.1428em;
   visibility: visible;
 `;
 
 const RightArrow = styled.img`
   position: relative;
-  top: -211px;
-  left: 980px;
+  top: -15.0714em;
+  left: 70em;
   visibility: visible;
 `;
 
