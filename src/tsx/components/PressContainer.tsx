@@ -9,6 +9,11 @@ import ListView from "./ListView";
 function PressContainer({ news, subscriptions }: PressProps) {
   const [menuSelected, setMenuSelected] = useState<string>(MENU_STATES.allPress);
   const [viewSelected, setViewSelected] = useState<string>(VIEW_STATES.grid);
+  const viewComponents = {
+    [VIEW_STATES.grid]: GridView,
+    [VIEW_STATES.list]: ListView,
+  };
+  const SelectedView = viewComponents[viewSelected] || null;
 
   return (
     <Container>
@@ -43,11 +48,13 @@ function PressContainer({ news, subscriptions }: PressProps) {
         </ViewMenu>
       </Menu>
       <View>
-        {viewSelected === VIEW_STATES.grid ? (
-          <GridView news={news} subscriptions={subscriptions} menuSelected={menuSelected}></GridView>
-        ) : (
-          <ListView news={news} subscriptions={subscriptions} menuSelected={menuSelected}></ListView>
-        )}
+        {SelectedView ? (
+          <SelectedView
+            news={news}
+            subscriptions={subscriptions}
+            menuSelected={menuSelected}
+          />
+        ) : null}
       </View>
     </Container>
   );
