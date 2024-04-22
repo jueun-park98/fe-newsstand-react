@@ -1,23 +1,31 @@
 import styled from "styled-components";
 import { NewsProps } from "./constants";
 
-function DetailedNews({ newsItem }: NewsProps) {
+function DetailedNews({
+  newsItem: {
+    logoImageSrc,
+    editedTime,
+    headline: { thumbnailSrc, href, title },
+    sideNews,
+    pressName,
+  },
+}: NewsProps) {
   return (
     <Container>
       <NewsInfo>
-        <img src={newsItem.logoImageSrc} alt="logo" />
-        <EditedTime>{newsItem.editedTime}</EditedTime>
+        <img src={logoImageSrc} alt="logo" />
+        <EditedTime>{editedTime}</EditedTime>
       </NewsInfo>
       <NewsContent>
         <Headline>
-          <Thumbnail src={newsItem.headline.thumbnailSrc}></Thumbnail>
-          <HeadlineTitle href={newsItem.headline.href}>{newsItem.headline.title}</HeadlineTitle>
+          <Thumbnail src={thumbnailSrc}></Thumbnail>
+          <HeadlineTitle href={href}>{title}</HeadlineTitle>
         </Headline>
         <Sidenews>
-          {newsItem.sideNews.map((element) => (
+          {sideNews.map((element) => (
             <SideNewsTitle href={element.href}>{element.title}</SideNewsTitle>
           ))}
-          <span>{newsItem.pressName} 언론사에서 직접 편집한 뉴스입니다.</span>
+          <span>{pressName} 언론사에서 직접 편집한 뉴스입니다.</span>
         </Sidenews>
       </NewsContent>
     </Container>

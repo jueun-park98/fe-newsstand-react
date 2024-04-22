@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { News, RollingProps } from "./constants";
+import { RollingProps, RollingTextProps } from "./constants";
 import { increaseIndex, decreaseIndex } from "../utils/Utils";
 
 const LEFT_START_INDEX = 1;
@@ -22,7 +22,7 @@ function RollingContainer({ news }: RollingProps) {
     setAnimateLeft(true);
   };
   const updateRightStates = () => {
-    setRightIndex((prevIndex) => decreaseIndex(prevIndex, news.length));
+    setRightIndex(decreaseIndex(rightIndex, news.length));
     setAnimateRight(true);
   };
 
@@ -46,26 +46,25 @@ function RollingContainer({ news }: RollingProps) {
       <TextBox>
         {news
           .slice(leftIndex - 1, leftIndex + 1)
-          .map((element, index) => renderRollingText(element, index, animateLeft, setAnimateLeft))}
+          .map((element, index) =>
+            renderRollingText({ news: element, index, animate: animateLeft, setAnimate: setAnimateLeft })
+          )}
       </TextBox>
       <TextBox>
         {news
           .slice(rightIndex, rightIndex + 2)
           .reverse()
-          .map((element, index) => renderRollingText(element, index, animateRight, setAnimateRight))}
+          .map((element, index) =>
+            renderRollingText({ news: element, index, animate: animateRight, setAnimate: setAnimateRight })
+          )}
       </TextBox>
     </Container>
   );
 }
 
-const renderRollingText = (
-  news: News,
-  index: number,
-  animate: boolean,
-  setAnimationState: (state: boolean) => void
-) => {
+const renderRollingText = ({ news, index, animate, setAnimate }: RollingTextProps) => {
   return (
-    <RollingText animate={animate} index={index} onAnimationEnd={() => setAnimationState(false)}>
+    <RollingText animate={animate} index={index} onAnimationEnd={() => setAnimate(false)}>
       <Press>{news.pressName}</Press>
       <Title href={news.headline.href}>{news.headline.title}</Title>
     </RollingText>
@@ -108,9 +107,7 @@ const RollingText = styled.div<{ animate: boolean; index: number }>`
       animation-fill-mode: forwards;
     `};
   top: ${({ animate, index }) =>
-    animate
-      ? `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}em;`
-      : `${ITEM_TOP_END + ITEM_TOP_INCREMENT * index}em;`};
+    animate ? `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}em;` : `${ITEM_TOP_END + ITEM_TOP_INCREMENT * index}em;`};
 `;
 
 const Press = styled.span`

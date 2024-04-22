@@ -36,6 +36,13 @@ export interface ViewProps extends PressProps {
   menuSelected: string;
 }
 
+export interface RollingTextProps {
+  news: News;
+  index: number;
+  animate: boolean;
+  setAnimate: (state: boolean) => void;
+}
+
 export interface LogoState {
   name: string;
   src: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import RollingContainer from "./RollingContainer";
 import PressContainer from "./PressContainer";
@@ -10,7 +10,12 @@ function App() {
   const [subscriptions, setSubscriptions] = useState<News[]>([]);
 
   useEffect(() => {
-    loadNews(setNews);
+    const loadNews = async () => {
+      const loadedNews = await fetchNews();
+      setNews(loadedNews as News[]);
+    };
+
+    loadNews();
   }, []);
 
   return (
@@ -21,10 +26,5 @@ function App() {
     </div>
   );
 }
-
-const loadNews: (setFn: Function) => void = async (setFn) => {
-  const loadedNews = await fetchNews();
-  setFn(loadedNews);
-};
 
 export default App;
