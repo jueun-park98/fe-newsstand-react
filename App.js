@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import mongoose from "mongoose";
+import cors from "cors";
 import News from "./models/News.js";
 import Subscription from "./models/Subscription.js";
 import newsList from "./data/news.js";
@@ -17,6 +18,7 @@ const port = 3000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
+app.use(cors());
 
 app.use("/news", newsRouter);
 app.use("/subscription", subscriptionRouter);

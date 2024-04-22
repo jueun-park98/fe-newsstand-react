@@ -22,6 +22,7 @@
   },
   "scripts": {
     "start": "cross-env MONGODB_URI=mongodb://127.0.0.1:27017/newsstand nodemon App.js",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -46,6 +47,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3"
   }
 }
