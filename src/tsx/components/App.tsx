@@ -3,7 +3,7 @@ import Header from "./Header";
 import RollingContainer from "./RollingContainer";
 import PressContainer from "./PressContainer";
 import { fetchNews } from "../api/NewsAPI";
-import { NewsContext, NewsProvider } from "./NewsProvider";
+import { NewsContext } from "./NewsProvider";
 import { News } from "./constants";
 
 function App() {

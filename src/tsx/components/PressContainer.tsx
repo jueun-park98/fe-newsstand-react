@@ -16,7 +16,7 @@ function PressContainer() {
   const SelectedView = viewComponents[viewSelected] || null;
 
   return (
-    <Container>
+    <div>
       <Menu>
         <PressMenu>
           <PressTextMenu
@@ -48,11 +48,9 @@ function PressContainer() {
         </ViewMenu>
       </Menu>
       <View>{SelectedView ? <SelectedView menuSelected={menuSelected} /> : null}</View>
-    </Container>
+    </div>
   );
 }
-
-const Container = styled.div``;
 
 const Menu = styled.ul`
   display: flex;

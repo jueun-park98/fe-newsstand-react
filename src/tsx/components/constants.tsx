@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface Headline {
   thumbnailSrc: string;
   title: string;
@@ -17,6 +19,14 @@ export interface News {
   category: string;
   headline: Headline;
   sideNews: Sidenews[];
+}
+
+export interface Category {
+  name: string;
+  details: {
+    firstIndex: number,
+    count: number,
+  }
 }
 
 export interface NewsProps {
@@ -41,6 +51,12 @@ export interface RollingTextProps {
   index: number;
   animate: boolean;
   setAnimate: (state: boolean) => void;
+}
+
+export interface TabProps {
+  categories: Category[];
+  pageState: PageState;
+  dispatch: React.Dispatch<PageAction>;
 }
 
 export interface LogoState {
