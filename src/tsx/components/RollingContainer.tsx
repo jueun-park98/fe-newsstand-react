@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { RollingProps, RollingTextProps } from "./constants";
+import { RollingTextProps } from "./constants";
 import { increaseIndex, decreaseIndex } from "../utils/Utils";
+import { NewsContext } from "./NewsProvider";
 
 const LEFT_START_INDEX = 1;
 const RIGHT_START_INDEX = 2;
@@ -11,7 +12,8 @@ const ITEM_TOP_START = 0.5714;
 const ITEM_TOP_END = -2.0714;
 const ITEM_TOP_INCREMENT = 1.4286;
 
-function RollingContainer({ news }: RollingProps) {
+function RollingContainer() {
+  const [{ news, subscription }] = useContext(NewsContext);
   const [leftIndex, setLeftIndex] = useState<number>(LEFT_START_INDEX);
   const [rightIndex, setRightIndex] = useState<number>(news.length - RIGHT_START_INDEX);
   const [animateLeft, setAnimateLeft] = useState<boolean>(false);

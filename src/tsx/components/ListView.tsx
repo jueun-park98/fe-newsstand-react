@@ -2,9 +2,10 @@ import styled, { css, keyframes } from "styled-components";
 import leftArrow from "../../img/leftArrow.svg";
 import rightArrow from "../../img/rightArrow.svg";
 import { News, PageAction, PageState, ViewProps } from "./constants";
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { decreaseIndex, increaseIndex } from "../utils/Utils";
 import DetailedNews from "./DetailedNews";
+import { NewsContext } from "./NewsProvider";
 
 const initialPageState = {
   page: 0,
@@ -25,7 +26,8 @@ const pageReducer = (state: PageState, action: PageAction) => {
   }
 };
 
-function ListView({ news, subscriptions, menuSelected }: ViewProps) {
+function ListView({ menuSelected }: ViewProps) {
+  const [{ news, subscription }] = useContext(NewsContext);
   const [{ page, animateProgress }, dispatch] = useReducer(pageReducer, initialPageState);
   const categories = getCategories(news);
 

@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LogoState, MENU_STATES, News, ViewProps } from "./constants";
 import leftArrow from "../../img/leftArrow.svg";
 import rightArrow from "../../img/rightArrow.svg";
 import styled from "styled-components";
 import { decreaseIndex, increaseIndex } from "../utils/Utils";
+import { NewsContext } from "./NewsProvider";
 
 const MAX_PAGE = 4;
 const LOGO_COUNT_PER_PAGE = 24;
 
-function GridView({ news, subscriptions, menuSelected }: ViewProps) {
+function GridView({ menuSelected }: ViewProps) {
+  const [{ news, subscription }] = useContext(NewsContext);
   const [page, setPage] = useState<number>(0);
   const [subscriptionPage, setSubscriptionPage] = useState<number>(0);
   const [logos, setLogos] = useState<LogoState[]>([]);
@@ -19,7 +21,7 @@ function GridView({ news, subscriptions, menuSelected }: ViewProps) {
       setLogos(logosToSave);
     }
     if (menuSelected === MENU_STATES.subscribedPress) {
-      const logosToSave = subscriptions.map(convertToLogo);
+      const logosToSave = subscription.map(convertToLogo);
       setLogos(logosToSave);
     }
   }, [news.length, menuSelected]);
@@ -31,16 +33,8 @@ function GridView({ news, subscriptions, menuSelected }: ViewProps) {
           <Logo src={logo.src} name={logo.name}></Logo>
         </LogoBox>
       ))}
-      <LeftArrow
-        page={page}
-        src={leftArrow}
-        onClick={() => setPage(decreaseIndex(page, MAX_PAGE))}
-      />
-      <RightArrow
-        page={page}
-        src={rightArrow}
-        onClick={() => setPage(increaseIndex(page, MAX_PAGE))}
-      />
+      <LeftArrow page={page} src={leftArrow} onClick={() => setPage(decreaseIndex(page, MAX_PAGE))} />
+      <RightArrow page={page} src={rightArrow} onClick={() => setPage(increaseIndex(page, MAX_PAGE))} />
     </Table>
   );
 }

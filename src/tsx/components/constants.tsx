@@ -32,7 +32,7 @@ export interface PressProps {
   subscriptions: News[];
 }
 
-export interface ViewProps extends PressProps {
+export interface ViewProps {
   menuSelected: string;
 }
 
@@ -58,7 +58,6 @@ export type PageAction =
   | { type: "SET_PAGE"; payload: { page: number } }
   | { type: "SET_SUBSCRIPTION_PAGE"; payload: { subscriptionPage: number } }
   | { type: "START_ANIMATION" };
-
 
 export const MENU_STATES = {
   allPress: "ALL_PRESS",

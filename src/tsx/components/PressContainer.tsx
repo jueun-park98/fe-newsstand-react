@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import gridIcon from "../../img/gridIcon.svg";
 import listIcon from "../../img/listIcon.svg";
 import styled from "styled-components";
-import { MENU_STATES, PressProps, VIEW_STATES } from "./constants";
+import { MENU_STATES, VIEW_STATES } from "./constants";
 import GridView from "./GridView";
 import ListView from "./ListView";
 
-function PressContainer({ news, subscriptions }: PressProps) {
+function PressContainer() {
   const [menuSelected, setMenuSelected] = useState<string>(MENU_STATES.allPress);
   const [viewSelected, setViewSelected] = useState<string>(VIEW_STATES.grid);
   const viewComponents = {
@@ -47,15 +47,7 @@ function PressContainer({ news, subscriptions }: PressProps) {
           ></ViewIcon>
         </ViewMenu>
       </Menu>
-      <View>
-        {SelectedView ? (
-          <SelectedView
-            news={news}
-            subscriptions={subscriptions}
-            menuSelected={menuSelected}
-          />
-        ) : null}
-      </View>
+      <View>{SelectedView ? <SelectedView menuSelected={menuSelected} /> : null}</View>
     </Container>
   );
 }

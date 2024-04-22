@@ -1,4 +1,3 @@
-import React from "react";
 import logo from "../../img/logo.svg";
 import styled from "styled-components";
 
@@ -29,9 +28,7 @@ const renderCurrentDate = () => {
   const date = currentDate.getDate();
   const day = WEEKDAY[currentDate.getDay()];
 
-  return `${year}. ${month.toString().padStart(CHAR_COUNT, "0")}. ${date
-    .toString()
-    .padStart(CHAR_COUNT, "0")}. ${day}`;
+  return `${year}. ${month.toString().padStart(CHAR_COUNT, "0")}. ${date.toString().padStart(CHAR_COUNT, "0")}. ${day}`;
 };
 
 const HeaderContainer = styled.div`
