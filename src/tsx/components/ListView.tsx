@@ -1,28 +1,40 @@
 import styled, { css, keyframes } from "styled-components";
 import leftArrow from "../../img/leftArrow.svg";
 import rightArrow from "../../img/rightArrow.svg";
-import { News, ViewProps } from "./constants";
-import { useEffect, useState } from "react";
+import { News, PageAction, PageState, ViewProps } from "./constants";
+import { useEffect, useReducer, useState } from "react";
 import { decreaseIndex, increaseIndex } from "../utils/Utils";
 import DetailedNews from "./DetailedNews";
 
+const initialPageState = {
+  page: 0,
+  subscriptionPage: 0,
+  animateProgress: true,
+};
+
+const pageReducer = (state: PageState, action: PageAction) => {
+  switch (action.type) {
+    case "SET_PAGE":
+      return { ...state, page: action.payload.page, animateProgress: false };
+    case "SET_SUBSCRIPTION_PAGE":
+      return { ...state, subscriptionPage: action.payload.subscriptionPage, animateProgress: false };
+    case "START_ANIMATION":
+      return { ...state, animateProgress: true };
+    default:
+      return state;
+  }
+};
+
 function ListView({ news, subscriptions, menuSelected }: ViewProps) {
-  const [page, setPage] = useState<number>(0);
-  const [subscriptionPage, setSubscriptionPage] = useState<number>(0);
-  const [animateProgress, setAnimateProgress] = useState<boolean>(true);
+  const [{ page, animateProgress }, dispatch] = useReducer(pageReducer, initialPageState);
   const categories = getCategories(news);
 
-  const increasePage = () => {
-    setAnimateProgress(false);
-    setPage(increaseIndex(page, news.length));
-  };
-  const decreasePage = () => {
-    setAnimateProgress(false);
-    setPage(decreaseIndex(page, news.length));
-  };
+  const setPage = (page: number) => dispatch({ type: "SET_PAGE", payload: { page: page } });
+  const increasePage = () => setPage(increaseIndex(page, news.length));
+  const decreasePage = () => setPage(decreaseIndex(page, news.length));
 
   useEffect(() => {
-    setAnimateProgress(true);
+    dispatch({ type: "START_ANIMATION" });
   }, [page]);
 
   return (
@@ -35,7 +47,7 @@ function ListView({ news, subscriptions, menuSelected }: ViewProps) {
               <TabDescription>
                 <div>{category}</div>
                 <div>
-                  {page - firstIndex + 1} / <span style={{ opacity: 0.7 }}>{count}</span>
+                  {page - firstIndex + 1} / <NewsCount>{count}</NewsCount>
                 </div>
               </TabDescription>
             </ActiveTab>
@@ -51,9 +63,7 @@ function ListView({ news, subscriptions, menuSelected }: ViewProps) {
   );
 }
 
-const getCategories: (news: News[]) => [string, { firstIndex: number; count: number }][] = (
-  news
-) => {
+const getCategories: (news: News[]) => [string, { firstIndex: number; count: number }][] = (news) => {
   return Array.from(
     news.reduce((acc, cur, index) => {
       if (!acc.has(cur.category)) {
@@ -61,18 +71,14 @@ const getCategories: (news: News[]) => [string, { firstIndex: number; count: num
         return acc;
       }
       const current = acc.get(cur.category);
-      if (current)
-        acc.set(cur.category, { firstIndex: current?.firstIndex, count: current.count + 1 });
+      if (current) acc.set(cur.category, { firstIndex: current?.firstIndex, count: current.count + 1 });
       return acc;
     }, new Map<string, { firstIndex: number; count: number }>())
   );
 };
 
-const isInRange: (index: number, minIndex: number, count: number) => boolean = (
-  index,
-  minIndex,
-  count
-) => index >= minIndex && index < minIndex + count;
+const isInRange: (index: number, minIndex: number, count: number) => boolean = (index, minIndex, count) =>
+  index >= minIndex && index < minIndex + count;
 
 const increaseWidth = keyframes`
   from {
@@ -150,6 +156,10 @@ const TabDescription = styled.div`
     background-color: transparent;
     color: inherit;
   }
+`;
+
+const NewsCount = styled.span`
+  opacity: 0.7;
 `;
 
 const LeftArrow = styled.img`

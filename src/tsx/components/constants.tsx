@@ -48,6 +48,18 @@ export interface LogoState {
   src: string;
 }
 
+export interface PageState {
+  page: number;
+  subscriptionPage: number;
+  animateProgress: boolean;
+}
+
+export type PageAction =
+  | { type: "SET_PAGE"; payload: { page: number } }
+  | { type: "SET_SUBSCRIPTION_PAGE"; payload: { subscriptionPage: number } }
+  | { type: "START_ANIMATION" };
+
+
 export const MENU_STATES = {
   allPress: "ALL_PRESS",
   subscribedPress: "SUBSCRIBED_PRESS",
