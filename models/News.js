@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const newsSchema = new mongoose.Schema({
+  _id: String,
   pressName: String,
   logoImageSrc: String,
   editedTime: String,

@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { AlertProps } from "./constants";
+import { AlertProps } from "../../constants";
+import { useContext } from "react";
+import { SubscribeContext } from "../provider/SubscribeProvider";
 
 export function SubscribeSnackbar() {
   return (
@@ -11,18 +13,28 @@ export function SubscribeSnackbar() {
 }
 
 export function UnsubscribeAlert({ name, onUnsubscribe }: AlertProps) {
+  const [_, subscribeDispatch] = useContext(SubscribeContext);
+
   return (
     <AlertContainer>
       <AlertContent>
-        <span><strong>{name}</strong>을(를)</span>
+        <span>
+          <strong>{name}</strong>을(를)
+        </span>
         <span>구독해지 하시겠습니까?</span>
       </AlertContent>
       <AlertClickable>
-        <AlertSubmit onClick={onUnsubscribe}>예, 해지합니다</AlertSubmit>
-        <AlertCancel>아니오</AlertCancel>
+        <AlertSubmit onClick={() => onUnsubscribe(name)}>예, 해지합니다</AlertSubmit>
+        <AlertCancel
+          onClick={() =>
+            subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: false } })
+          }
+        >
+          아니오
+        </AlertCancel>
       </AlertClickable>
     </AlertContainer>
-  )
+  );
 }
 
 const BlurBackGround = styled.div`
@@ -65,19 +77,19 @@ const AlertContent = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #fff;
-  color: #5F6E76;
+  color: #5f6e76;
   border: 1px solid #d2dae0;
 
   & > span > strong {
     font-size: 700;
-    color: #14212B;
+    color: #14212b;
   }
 `;
 
 const AlertClickable = styled.div`
   height: 48px;
   display: flex;
-  background-color: #F5F7F9;
+  background-color: #f5f7f9;
 `;
 
 const AlertSubmit = styled.div`
@@ -85,7 +97,7 @@ const AlertSubmit = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #5F6E76;
+  color: #5f6e76;
   border: 1px solid #d2dae0;
 
   &:hover {
@@ -98,7 +110,7 @@ const AlertCancel = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #14212B;
+  color: #14212b;
   border: 1px solid #d2dae0;
 
   &:hover {

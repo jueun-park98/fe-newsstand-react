@@ -1,9 +1,21 @@
-import logo from "../../img/logo.svg";
+import logo from "../../../img/logo.svg";
 import styled from "styled-components";
 
 const WEEKDAY = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
 const INCREMENT = 1;
 const CHAR_COUNT = 2;
+
+const reloadPage = () => window.location.reload();
+
+const renderCurrentDate = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + INCREMENT;
+  const date = currentDate.getDate();
+  const day = WEEKDAY[currentDate.getDay()];
+
+  return `${year}. ${month.toString().padStart(CHAR_COUNT, "0")}. ${date.toString().padStart(CHAR_COUNT, "0")}. ${day}`;
+};
 
 function Header() {
   return (
@@ -18,18 +30,6 @@ function Header() {
     </HeaderContainer>
   );
 }
-
-const reloadPage = () => window.location.reload();
-
-const renderCurrentDate = () => {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + INCREMENT;
-  const date = currentDate.getDate();
-  const day = WEEKDAY[currentDate.getDay()];
-
-  return `${year}. ${month.toString().padStart(CHAR_COUNT, "0")}. ${date.toString().padStart(CHAR_COUNT, "0")}. ${day}`;
-};
 
 const HeaderContainer = styled.div`
   display: flex;

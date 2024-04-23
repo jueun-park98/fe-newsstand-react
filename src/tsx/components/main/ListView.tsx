@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import leftArrow from "../../img/leftArrow.svg";
-import rightArrow from "../../img/rightArrow.svg";
-import { Category, News, PageAction, PageState, ViewProps } from "./constants";
+import leftArrow from "../../../img/leftArrow.svg";
+import rightArrow from "../../../img/rightArrow.svg";
+import { Category, News, PageAction, PageState, ViewProps } from "../../constants";
 import { useContext, useEffect, useReducer } from "react";
-import { decreaseIndex, increaseIndex } from "../utils/Utils";
+import { decreaseIndex, increaseIndex } from "../../utils/Utils";
 import DetailedNews from "./DetailedNews";
-import { NewsContext } from "./NewsProvider";
-import TabBlock from './TabBlock';
+import { NewsContext } from "../provider/NewsProvider";
+import TabBlock from "./TabBlock";
 
 const initialPageState = {
   page: 0,
@@ -14,12 +14,12 @@ const initialPageState = {
   animateProgress: true,
 };
 
-const pageReducer = (state: PageState, action: PageAction) => {
-  switch (action.type) {
+const pageReducer = (state: PageState, { type, payload }: PageAction) => {
+  switch (type) {
     case "SET_PAGE":
-      return { ...state, page: action.payload.page, animateProgress: false };
+      return { ...state, page: payload.page, animateProgress: false };
     case "SET_SUBSCRIPTION_PAGE":
-      return { ...state, subscriptionPage: action.payload.subscriptionPage, animateProgress: false };
+      return { ...state, subscriptionPage: payload.subscriptionPage, animateProgress: false };
     case "START_ANIMATION":
       return { ...state, animateProgress: true };
     default:
@@ -34,29 +34,37 @@ const getCategories: (news: News[]) => Category[] = (news) => {
       return acc;
     }
     const current = acc.get(cur.category);
-    if (current) acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
+    if (current)
+      acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
     return acc;
   }, new Map<string, { firstIndex: number; count: number }>());
 
-  return Array.from(categoryMap, ([name, details]) => ({name, details}));
+  return Array.from(categoryMap, ([name, details]) => ({ name, details }));
 };
 
 function ListView({ menuSelected }: ViewProps) {
-  const [{ news, subscription }] = useContext(NewsContext);
-  const [{ page, subscriptionPage, animateProgress }, dispatch] = useReducer(pageReducer, initialPageState);
+  const [{ news }] = useContext(NewsContext);
+  const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(
+    pageReducer,
+    initialPageState
+  );
   const categories = getCategories(news);
 
-  const setPage = (page: number) => dispatch({ type: "SET_PAGE", payload: { page: page } });
+  const setPage = (page: number) => pageDispatch({ type: "SET_PAGE", payload: { page: page } });
   const increasePage = () => setPage(increaseIndex(page, news.length));
   const decreasePage = () => setPage(decreaseIndex(page, news.length));
 
   useEffect(() => {
-    dispatch({ type: "START_ANIMATION" });
+    pageDispatch({ type: "START_ANIMATION" });
   }, [page]);
 
   return (
     <Container>
-      <TabBlock categories={categories} pageState={{ page, subscriptionPage, animateProgress }} dispatch={dispatch} />
+      <TabBlock
+        categories={categories}
+        pageState={{ page, subscriptionPage, animateProgress }}
+        dispatch={pageDispatch}
+      />
       <DetailedNews newsItem={news[page]} />
       <LeftArrow src={leftArrow} onClick={decreasePage}></LeftArrow>
       <RightArrow src={rightArrow} onClick={increasePage}></RightArrow>

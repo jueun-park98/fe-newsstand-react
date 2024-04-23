@@ -3,13 +3,13 @@ import ReactDOM from "react-dom/client";
 import "./css/index.css";
 import App from "./tsx/components/App";
 import reportWebVitals from "./tsx/env/reportWebVitals";
-import { NewsProvider } from "./tsx/components/NewsProvider";
+import { NewsProvider } from "./tsx/components/provider/NewsProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-    <NewsProvider>
-        <App />
-    </NewsProvider>
+  <NewsProvider>
+    <App />
+  </NewsProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

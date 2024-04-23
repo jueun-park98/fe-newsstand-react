@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import { NewsProps } from "./constants";
+import { NewsProps } from "../../constants";
 
-function DetailedNews({
-  newsItem: {
+function DetailedNews({ newsItem }: NewsProps) {
+  const {
     logoImageSrc,
     editedTime,
     headline: { thumbnailSrc, href, title },
     sideNews,
     pressName,
-  },
-}: NewsProps) {
+  } = newsItem;
+
   return (
     <Container>
       <NewsInfo>

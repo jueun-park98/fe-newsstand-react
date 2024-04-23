@@ -1,4 +1,4 @@
-import { News } from "../components/constants";
+import { News } from "../constants";
 
 const SERVER = process.env.REACT_APP_SERVER;
 

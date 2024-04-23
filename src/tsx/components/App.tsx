@@ -1,13 +1,14 @@
 import { useContext, useEffect } from "react";
-import Header from "./Header";
-import RollingContainer from "./RollingContainer";
-import PressContainer from "./PressContainer";
+import Header from "./header/Header";
+import RollingContainer from "./headline/RollingContainer";
+import PressContainer from "./main/PressContainer";
 import { fetchNews, fetchSubscription } from "../api/NewsAPI";
-import { NewsContext } from "./NewsProvider";
-import { News } from "./constants";
+import { NewsContext } from "./provider/NewsProvider";
+import { News } from "../constants";
+import { SubscribeProvider } from "./provider/SubscribeProvider";
 
 function App() {
-  const [{ news, subscription }, setNewsState] = useContext(NewsContext);
+  const [_, setNewsState] = useContext(NewsContext);
 
   useEffect(() => {
     const loadNews = async () => {
@@ -21,9 +22,11 @@ function App() {
 
   return (
     <div>
-        <Header />
-        <RollingContainer />
+      <Header />
+      <RollingContainer />
+      <SubscribeProvider>
         <PressContainer />
+      </SubscribeProvider>
     </div>
   );
 }

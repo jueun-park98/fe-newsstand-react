@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface Headline {
   thumbnailSrc: string;
@@ -24,9 +24,9 @@ export interface News {
 export interface Category {
   name: string;
   details: {
-    firstIndex: number,
-    count: number,
-  }
+    firstIndex: number;
+    count: number;
+  };
 }
 
 export interface NewsProps {
@@ -44,7 +44,9 @@ export interface PressProps {
 
 export interface ViewProps {
   menuSelected: string;
-  setMenuSelected: (menuSelected: string) => void;
+  subscribeState: SubscribeState;
+  handleSubscribe: (logoName: string) => Promise<void>;
+  handleUnsubscribe: (logoName: string) => Promise<void>;
 }
 
 export interface RollingTextProps {
@@ -61,8 +63,18 @@ export interface TabProps {
 }
 
 export interface AlertProps {
-  name: String;
-  onUnsubscribe: () => Promise<void>;
+  name: string;
+  onUnsubscribe: (name: string) => void;
+}
+
+export interface LogoBoxProps {
+  logo: {
+    src: string;
+    name: string;
+  };
+  onSubscribe: (name: string) => void;
+  onUnsubscribe: (name: string) => void;
+  isSubscribed: boolean;
 }
 
 export interface LogoState {
@@ -76,10 +88,21 @@ export interface PageState {
   animateProgress: boolean;
 }
 
+export interface SubscribeState {
+  showSnackBar: boolean;
+  showAlert: boolean;
+  alertMessage: string;
+}
+
 export type PageAction =
   | { type: "SET_PAGE"; payload: { page: number } }
   | { type: "SET_SUBSCRIPTION_PAGE"; payload: { subscriptionPage: number } }
-  | { type: "START_ANIMATION" };
+  | { type: "START_ANIMATION"; payload?: never };
+
+export type SubscribeAction =
+  | { type: "SET_SHOW_SNACKBAR"; payload: { showSnackBar: boolean } }
+  | { type: "SET_SHOW_ALERT"; payload: { showAlert: boolean } }
+  | { type: "SET_ALERT_MESSAGE"; payload: { alertMessage: string } };
 
 export const MENU_STATES = {
   allPress: "ALL_PRESS",

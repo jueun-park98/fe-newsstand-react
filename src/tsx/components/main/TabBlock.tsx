@@ -1,6 +1,6 @@
-import { increaseIndex, isInRange } from "../utils/Utils";
-import styled, { css, keyframes } from 'styled-components';
-import { TabProps } from './constants';
+import { increaseIndex, isInRange } from "../../utils/Utils";
+import styled, { css, keyframes } from "styled-components";
+import { TabProps } from "../../constants";
 
 function TabBlock({ categories, pageState, dispatch }: TabProps) {
   const { page, animateProgress } = pageState;
@@ -10,10 +10,13 @@ function TabBlock({ categories, pageState, dispatch }: TabProps) {
 
   return (
     <Container>
-      {categories.map(({ name, details: { firstIndex, count } }) => 
+      {categories.map(({ name, details: { firstIndex, count } }) =>
         isInRange(page, firstIndex, count) ? (
           <ActiveTab>
-            <ProgressBar animate={animateProgress} onAnimationIteration={increasePage}></ProgressBar>
+            <ProgressBar
+              animate={animateProgress}
+              onAnimationIteration={increasePage}
+            ></ProgressBar>
             <TabDescription>
               <div>{name}</div>
               <div>
@@ -27,7 +30,7 @@ function TabBlock({ categories, pageState, dispatch }: TabProps) {
       )}
     </Container>
   );
-};
+}
 
 const increaseWidth = keyframes`
   from {
