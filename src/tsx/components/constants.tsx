@@ -12,7 +12,7 @@ interface Sidenews {
 }
 
 export interface News {
-  id: string;
+  _id: string;
   pressName: string;
   logoImageSrc: string;
   editedTime: string;
@@ -60,8 +60,9 @@ export interface TabProps {
   dispatch: React.Dispatch<PageAction>;
 }
 
-export interface SnackBarProps {
-  name: string;
+export interface AlertProps {
+  name: String;
+  onUnsubscribe: () => Promise<void>;
 }
 
 export interface LogoState {
