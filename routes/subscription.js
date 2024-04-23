@@ -14,7 +14,7 @@ subscriptionRouter.get("/", async (req, res) => {
 
 subscriptionRouter.post("/", async (req, res) => {
   try {
-    const { news } = req.body;
+    const news = req.body;
     const newSubscription = new Subscription(news);
 
     await newSubscription.save();

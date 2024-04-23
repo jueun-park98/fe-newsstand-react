@@ -44,6 +44,7 @@ export interface PressProps {
 
 export interface ViewProps {
   menuSelected: string;
+  setMenuSelected: (menuSelected: string) => void;
 }
 
 export interface RollingTextProps {
@@ -57,6 +58,10 @@ export interface TabProps {
   categories: Category[];
   pageState: PageState;
   dispatch: React.Dispatch<PageAction>;
+}
+
+export interface SnackBarProps {
+  name: string;
 }
 
 export interface LogoState {

@@ -47,7 +47,9 @@ function PressContainer() {
           ></ViewIcon>
         </ViewMenu>
       </Menu>
-      <View>{SelectedView ? <SelectedView menuSelected={menuSelected} /> : null}</View>
+      <View>
+        {SelectedView ? <SelectedView menuSelected={menuSelected} setMenuSelected={setMenuSelected} /> : null}
+      </View>
     </div>
   );
 }

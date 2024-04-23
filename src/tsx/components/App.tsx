@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import Header from "./Header";
 import RollingContainer from "./RollingContainer";
 import PressContainer from "./PressContainer";
-import { fetchNews } from "../api/NewsAPI";
+import { fetchNews, fetchSubscription } from "../api/NewsAPI";
 import { NewsContext } from "./NewsProvider";
 import { News } from "./constants";
 
@@ -12,7 +12,8 @@ function App() {
   useEffect(() => {
     const loadNews = async () => {
       const loadedNews = await fetchNews();
-      setNewsState({ news: loadedNews as News[], subscription });
+      const loadedSubscription = await fetchSubscription();
+      setNewsState({ news: loadedNews as News[], subscription: loadedSubscription as News[] });
     };
 
     loadNews();

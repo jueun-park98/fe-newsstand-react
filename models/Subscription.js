@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const subscriptionSchema = new mongoose.Schema({
-  id: String,
   pressName: String,
   logoImageSrc: String,
   editedTime: String,

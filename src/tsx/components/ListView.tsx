@@ -27,6 +27,20 @@ const pageReducer = (state: PageState, action: PageAction) => {
   }
 };
 
+const getCategories: (news: News[]) => Category[] = (news) => {
+  const categoryMap = news.reduce((acc, cur, index) => {
+    if (!acc.has(cur.category)) {
+      acc.set(cur.category, { firstIndex: index, count: 1 });
+      return acc;
+    }
+    const current = acc.get(cur.category);
+    if (current) acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
+    return acc;
+  }, new Map<string, { firstIndex: number; count: number }>());
+
+  return Array.from(categoryMap, ([name, details]) => ({name, details}));
+};
+
 function ListView({ menuSelected }: ViewProps) {
   const [{ news, subscription }] = useContext(NewsContext);
   const [{ page, subscriptionPage, animateProgress }, dispatch] = useReducer(pageReducer, initialPageState);
@@ -49,20 +63,6 @@ function ListView({ menuSelected }: ViewProps) {
     </Container>
   );
 }
-
-const getCategories: (news: News[]) => Category[] = (news) => {
-  const categoryMap = news.reduce((acc, cur, index) => {
-    if (!acc.has(cur.category)) {
-      acc.set(cur.category, { firstIndex: index, count: 1 });
-      return acc;
-    }
-    const current = acc.get(cur.category);
-    if (current) acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
-    return acc;
-  }, new Map<string, { firstIndex: number; count: number }>());
-
-  return Array.from(categoryMap, ([name, details]) => ({name, details}));
-};
 
 const Container = styled.div`
   width: 100%;
