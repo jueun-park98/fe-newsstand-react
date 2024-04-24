@@ -1,16 +1,30 @@
 import { increaseIndex, isInRange } from "../../utils/Utils";
 import styled, { css, keyframes } from "styled-components";
-import { AllPressTabsProps, MENU_STATES, SubscribedPressTabsProps, TabProps } from "../../constants";
+import {
+  AllPressTabsProps,
+  MENU_STATES,
+  SubscribedPressTabsProps,
+  TabProps,
+} from "../../constants";
 import { NewsContext } from "../provider/NewsProvider";
 import { useContext, useEffect } from "react";
 
-function AllPressTabs({ categories, page, animateProgress, increasePage, setPage }: AllPressTabsProps) {
+function AllPressTabs({
+  categories,
+  page,
+  animateProgress,
+  increasePage,
+  setPage,
+}: AllPressTabsProps) {
   return (
     <>
       {categories.map(({ name, details: { firstIndex, count } }) =>
         isInRange(page, firstIndex, count) ? (
           <ActiveTab>
-            <ProgressBar animate={animateProgress} onAnimationIteration={increasePage}></ProgressBar>
+            <ProgressBar
+              animate={animateProgress}
+              onAnimationIteration={increasePage}
+            ></ProgressBar>
             <TabDescription>
               <div>{name}</div>
               <div>
@@ -38,15 +52,16 @@ function SubscribedPressTabs({
       {subscription.map(({ pressName }, index) =>
         subscriptionPage === index ? (
           <ActiveTab>
-            <ProgressBar animate={animateProgress} onAnimationIteration={increaseSubscriptionPage}></ProgressBar>
+            <ProgressBar
+              animate={animateProgress}
+              onAnimationIteration={increaseSubscriptionPage}
+            ></ProgressBar>
             <TabDescription>
               <div>{pressName}</div>
             </TabDescription>
           </ActiveTab>
         ) : (
-          <InactiveTab onClick={() => setSubscriptionPage(index)}>
-            {pressName}
-          </InactiveTab>
+          <InactiveTab onClick={() => setSubscriptionPage(index)}>{pressName}</InactiveTab>
         )
       )}
     </>
@@ -61,7 +76,8 @@ function TabBlock({ menuSelected, categories, pageState, dispatch }: TabProps) {
   const increasePage = () => setPage(increaseIndex(page, news.length));
   const setSubscriptionPage = (subscriptionPage: number) =>
     dispatch({ type: "SET_SUBSCRIPTION_PAGE", payload: { subscriptionPage } });
-  const increaseSubscriptionPage = () => setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
+  const increaseSubscriptionPage = () =>
+    setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
 
   useEffect(() => {
     dispatch({ type: "START_ANIMATION" });

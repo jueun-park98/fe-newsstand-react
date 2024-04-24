@@ -37,6 +37,11 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
   const [page, setPage] = useState<number>(0);
   const [logos, setLogos] = useState<LogoState[]>([]);
 
+  const handleUnsubscribeButtonClick = (logoName: string) => {
+    subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
+    subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: logoName } });
+  };
+
   useEffect(() => {
     if (menuSelected === MENU_STATES.allPress) {
       const logosToSave = shuffle(news).slice(0, MAX_PAGE * LOGO_COUNT_PER_PAGE);
@@ -61,10 +66,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
                 <SubscribeButton
                   name={logo.name}
                   onSubscribe={handleSubscribe}
-                  onUnsubscribe={() => {
-                    subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
-                    subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: logo.name } });
-                  }}
+                  onUnsubscribe={() => handleUnsubscribeButtonClick(logo.name)}
                   isSubscribed={isSubscribed(logo.name, subscription)}
                 />
               </>
@@ -72,8 +74,16 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
           </LogoBox>
         ))}
       </Table>
-      <LeftArrow page={page} src={leftArrow} onClick={() => setPage(decreaseIndex(page, MAX_PAGE))} />
-      <RightArrow page={page} src={rightArrow} onClick={() => setPage(increaseIndex(page, MAX_PAGE))} />
+      <LeftArrow
+        page={page}
+        src={leftArrow}
+        onClick={() => setPage(decreaseIndex(page, MAX_PAGE))}
+      />
+      <RightArrow
+        page={page}
+        src={rightArrow}
+        onClick={() => setPage(increaseIndex(page, MAX_PAGE))}
+      />
     </>
   );
 }

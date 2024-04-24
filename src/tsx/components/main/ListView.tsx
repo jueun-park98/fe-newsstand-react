@@ -63,6 +63,10 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
     pageDispatch({ type: "SET_SUBSCRIPTION_PAGE", payload: { subscriptionPage } });
   const increaseSubscriptionPage = () => setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
   const decreaseSubscriptionPage = () => setSubscriptionPage(decreaseIndex(subscriptionPage, subscription.length));
+  const handleUnsubscribeButtonClick = (name: string) => {
+    subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
+    subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: name } });
+  };
 
   useEffect(() => {
     if (menuSelected === MENU_STATES.allPress) setNewsItem(news[page]);
@@ -87,10 +91,7 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
         <DetailedNews
           newsItem={newsItem}
           onSubscribe={handleSubscribe}
-          onUnsubscribe={() => {
-            subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
-            subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: newsItem.pressName } });
-          }}
+          onUnsubscribe={() => handleUnsubscribeButtonClick(newsItem.pressName)}
           isSubscribed={isSubscribed(newsItem.pressName, subscription)}
         />
         <LeftArrow
