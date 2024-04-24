@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import leftArrow from "../../../img/leftArrow.svg";
 import rightArrow from "../../../img/rightArrow.svg";
-import { Category, News, PageAction, PageState, ViewProps } from "../../constants";
-import { useContext, useEffect, useReducer } from "react";
+import { Category, MENU_STATES, News, PageAction, PageState, ViewProps } from "../../constants";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { decreaseIndex, increaseIndex, isSubscribed } from "../../utils/Utils";
 import DetailedNews from "./DetailedNews";
 import { NewsContext } from "../provider/NewsProvider";
@@ -48,37 +48,59 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
   const [{ news, subscription }] = useContext(NewsContext);
   const [_, subscribeDispatch] = useContext(SubscribeContext);
   const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(pageReducer, initialPageState);
-  const categories = getCategories(news);
+  const [newsItem, setNewsItem] = useState<News>(news[page]);
 
   const setPage = (page: number) => pageDispatch({ type: "SET_PAGE", payload: { page: page } });
   const increasePage = () => setPage(increaseIndex(page, news.length));
   const decreasePage = () => setPage(decreaseIndex(page, news.length));
+  const setSubscriptionPage = (subscriptionPage: number) =>
+    pageDispatch({ type: "SET_SUBSCRIPTION_PAGE", payload: { subscriptionPage } });
+  const increaseSubscriptionPage = () => setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
+  const decreaseSubscriptionPage = () => setSubscriptionPage(decreaseIndex(subscriptionPage, subscription.length));
 
   useEffect(() => {
-    pageDispatch({ type: "START_ANIMATION" });
-  }, [page]);
+    if (menuSelected === MENU_STATES.allPress) setNewsItem(news[page]);
+    if (menuSelected === MENU_STATES.subscribedPress) setNewsItem(subscription[subscriptionPage]);
+    if (subscriptionPage >= subscription.length) {
+      setSubscriptionPage(0);
+      setNewsItem(subscription[0]);
+    }
+  }, [news, subscription, menuSelected, page, subscriptionPage]);
 
   return (
     <>
       {showSnackBar && <SubscribeSnackbar />}
-      {showAlert && <UnsubscribeAlert name={news[page].pressName} onUnsubscribe={handleUnsubscribe} />}
+      {showAlert && <UnsubscribeAlert name={newsItem.pressName} onUnsubscribe={handleUnsubscribe} />}
       <Container>
         <TabBlock
-          categories={categories}
+          menuSelected={menuSelected}
+          categories={getCategories(news)}
           pageState={{ page, subscriptionPage, animateProgress }}
           dispatch={pageDispatch}
         />
         <DetailedNews
-          newsItem={news[page]}
+          newsItem={newsItem}
           onSubscribe={handleSubscribe}
           onUnsubscribe={() => {
             subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
-            subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: news[page].pressName } });
+            subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: newsItem.pressName } });
           }}
-          isSubscribed={isSubscribed(news[page].pressName, subscription)}
+          isSubscribed={isSubscribed(newsItem.pressName, subscription)}
         />
-        <LeftArrow src={leftArrow} onClick={decreasePage}></LeftArrow>
-        <RightArrow src={rightArrow} onClick={increasePage}></RightArrow>
+        <LeftArrow
+          src={leftArrow}
+          onClick={() => {
+            if (menuSelected === MENU_STATES.allPress) decreasePage();
+            if (menuSelected === MENU_STATES.subscribedPress) decreaseSubscriptionPage();
+          }}
+        ></LeftArrow>
+        <RightArrow
+          src={rightArrow}
+          onClick={() => {
+            if (menuSelected === MENU_STATES.allPress) increasePage();
+            if (menuSelected === MENU_STATES.subscribedPress) increaseSubscriptionPage();
+          }}
+        ></RightArrow>
       </Container>
     </>
   );
