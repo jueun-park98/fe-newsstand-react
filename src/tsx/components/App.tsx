@@ -12,9 +12,14 @@ function App() {
 
   useEffect(() => {
     const loadNews = async () => {
-      const loadedNews = await fetchNews();
-      const loadedSubscription = await fetchSubscription();
-      setNewsState({ news: loadedNews as News[], subscription: loadedSubscription as News[] });
+      try {
+        const loadedNews = await fetchNews();
+        const loadedSubscription = await fetchSubscription();
+        setNewsState({ news: loadedNews as News[], subscription: loadedSubscription as News[] });
+      } catch (error) {
+        console.error(`Server request failed!: ${error}`);
+        alert("서버 요청이 실패하였습니다!");
+      }
     };
 
     loadNews();
