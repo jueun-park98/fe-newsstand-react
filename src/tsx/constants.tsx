@@ -114,15 +114,22 @@ export interface SubscribeState {
   alertMessage: string;
 }
 
-export type PageAction =
-  | { type: "SET_PAGE"; payload: { page: number } }
-  | { type: "SET_SUBSCRIPTION_PAGE"; payload: { subscriptionPage: number } }
-  | { type: "START_ANIMATION"; payload?: never };
+export interface PageAction {
+  type: string;
+  payload?: {
+    page?: number;
+    subscriptionPage?: number;
+  }
+}
 
-export type SubscribeAction =
-  | { type: "SET_SHOW_SNACKBAR"; payload: { showSnackBar: boolean } }
-  | { type: "SET_SHOW_ALERT"; payload: { showAlert: boolean } }
-  | { type: "SET_ALERT_MESSAGE"; payload: { alertMessage: string } };
+export interface SubscribeAction {
+  type: string;
+  payload: {
+    showSnackBar?: boolean;
+    showAlert?: boolean;
+    alertMessage?: string;
+  }
+}
 
 export const MENU_STATES = {
   allPress: "ALL_PRESS",

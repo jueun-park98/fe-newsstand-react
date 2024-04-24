@@ -10,18 +10,24 @@ import TabBlock from "./TabBlock";
 import { SubscribeContext } from "../provider/SubscribeProvider";
 import { SubscribeSnackbar, UnsubscribeAlert } from "./Notification";
 
+const FIRST_INDEX = 0;
+
 const initialPageState = {
   page: 0,
   subscriptionPage: 0,
   animateProgress: true,
 };
 
-const pageReducer = (state: PageState, { type, payload }: PageAction) => {
+export const pageReducer = (state: PageState, { type, payload }: PageAction) => {
   switch (type) {
     case "SET_PAGE":
-      return { ...state, page: payload.page, animateProgress: false };
+      if (payload && payload.page != undefined)
+        return { ...state, page: payload.page, animateProgress: false };
+      return state;
     case "SET_SUBSCRIPTION_PAGE":
-      return { ...state, subscriptionPage: payload.subscriptionPage, animateProgress: false };
+      if (payload && payload.subscriptionPage !== undefined)
+        return { ...state, subscriptionPage: payload.subscriptionPage, animateProgress: false };
+      return state;
     case "START_ANIMATION":
       return { ...state, animateProgress: true };
     default:
@@ -62,8 +68,8 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
     if (menuSelected === MENU_STATES.allPress) setNewsItem(news[page]);
     if (menuSelected === MENU_STATES.subscribedPress) setNewsItem(subscription[subscriptionPage]);
     if (subscriptionPage >= subscription.length) {
-      setSubscriptionPage(0);
-      setNewsItem(subscription[0]);
+      setSubscriptionPage(FIRST_INDEX);
+      setNewsItem(subscription[FIRST_INDEX]);
     }
   }, [news, subscription, menuSelected, page, subscriptionPage]);
 

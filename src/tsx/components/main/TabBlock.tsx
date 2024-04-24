@@ -37,14 +37,14 @@ function SubscribedPressTabs({
     <>
       {subscription.map(({ pressName }, index) =>
         subscriptionPage === index ? (
-          <ActiveTab key={pressName}>
+          <ActiveTab>
             <ProgressBar animate={animateProgress} onAnimationIteration={increaseSubscriptionPage}></ProgressBar>
             <TabDescription>
               <div>{pressName}</div>
             </TabDescription>
           </ActiveTab>
         ) : (
-          <InactiveTab key={pressName} onClick={() => setSubscriptionPage(index)}>
+          <InactiveTab onClick={() => setSubscriptionPage(index)}>
             {pressName}
           </InactiveTab>
         )

@@ -24,13 +24,13 @@ const setShowAlert = (showAlert: boolean) =>
 
 function PressContainer() {
   const [{ news, subscription }, setNewsState] = useContext(NewsContext);
+  const [subscribeState, subscribeDispatch] = useContext(SubscribeContext);
   const [menuSelected, setMenuSelected] = useState<string>(MENU_STATES.allPress);
   const [viewSelected, setViewSelected] = useState<string>(VIEW_STATES.grid);
   const viewComponents = {
     [VIEW_STATES.grid]: GridView,
     [VIEW_STATES.list]: ListView,
   };
-  const [subscribeState, subscribeDispatch] = useContext(SubscribeContext);
   const SelectedView = viewComponents[viewSelected] || null;
 
   const handleSubscribeClick = async (logoName: string) => {

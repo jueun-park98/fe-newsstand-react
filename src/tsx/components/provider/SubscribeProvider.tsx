@@ -14,20 +14,20 @@ export const SubscribeContext = React.createContext<SubscribeContextType>([
   () => {},
 ]);
 
-const initialSubscribeState: SubscribeState = {
+export const initialSubscribeState: SubscribeState = {
   showSnackBar: false,
   showAlert: false,
   alertMessage: "",
 };
 
-const subscribeReducer = (state: SubscribeState, { type, payload }: SubscribeAction) => {
+export const subscribeReducer = (state: SubscribeState, { type, payload }: SubscribeAction) => {
   switch (type) {
     case "SET_SHOW_SNACKBAR":
-      return { ...state, showSnackBar: payload.showSnackBar };
+      return { ...state, showSnackBar: payload.showSnackBar ?? state.showSnackBar };
     case "SET_SHOW_ALERT":
-      return { ...state, showAlert: payload.showAlert };
+      return { ...state, showAlert: payload.showAlert ?? state.showAlert };
     case "SET_ALERT_MESSAGE":
-      return { ...state, alertMessage: payload.alertMessage };
+      return { ...state, alertMessage: payload.alertMessage ?? state.alertMessage };
     default:
       return state;
   }
