@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { NewsProps } from "../../constants";
+import { DetailedNewsProps, NewsProps } from "../../constants";
+import SubscribeButton from "./SubscribeButton";
 
-function DetailedNews({ newsItem }: NewsProps) {
+function DetailedNews({ newsItem, onSubscribe, onUnsubscribe, isSubscribed }: DetailedNewsProps) {
   const {
     logoImageSrc,
     editedTime,
@@ -15,6 +16,12 @@ function DetailedNews({ newsItem }: NewsProps) {
       <NewsInfo>
         <img src={logoImageSrc} alt="logo" />
         <EditedTime>{editedTime}</EditedTime>
+        <SubscribeButton
+          name={pressName}
+          onSubscribe={onSubscribe}
+          onUnsubscribe={onUnsubscribe}
+          isSubscribed={isSubscribed}
+        ></SubscribeButton>
       </NewsInfo>
       <NewsContent>
         <Headline>
@@ -54,6 +61,7 @@ const EditedTime = styled.div`
   font-size: 0.8571em;
   font-weight: 500;
   margin-left: 1.1429em;
+  margin-right: 1.1429em;
 `;
 
 const NewsContent = styled.div`

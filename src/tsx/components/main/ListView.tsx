@@ -3,10 +3,12 @@ import leftArrow from "../../../img/leftArrow.svg";
 import rightArrow from "../../../img/rightArrow.svg";
 import { Category, News, PageAction, PageState, ViewProps } from "../../constants";
 import { useContext, useEffect, useReducer } from "react";
-import { decreaseIndex, increaseIndex } from "../../utils/Utils";
+import { decreaseIndex, increaseIndex, isSubscribed } from "../../utils/Utils";
 import DetailedNews from "./DetailedNews";
 import { NewsContext } from "../provider/NewsProvider";
 import TabBlock from "./TabBlock";
+import { SubscribeContext } from "../provider/SubscribeProvider";
+import { SubscribeSnackbar, UnsubscribeAlert } from "./Notification";
 
 const initialPageState = {
   page: 0,
@@ -34,20 +36,18 @@ const getCategories: (news: News[]) => Category[] = (news) => {
       return acc;
     }
     const current = acc.get(cur.category);
-    if (current)
-      acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
+    if (current) acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
     return acc;
   }, new Map<string, { firstIndex: number; count: number }>());
 
   return Array.from(categoryMap, ([name, details]) => ({ name, details }));
 };
 
-function ListView({ menuSelected }: ViewProps) {
-  const [{ news }] = useContext(NewsContext);
-  const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(
-    pageReducer,
-    initialPageState
-  );
+function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubscribe }: ViewProps) {
+  const { showSnackBar, showAlert } = subscribeState;
+  const [{ news, subscription }] = useContext(NewsContext);
+  const [_, subscribeDispatch] = useContext(SubscribeContext);
+  const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(pageReducer, initialPageState);
   const categories = getCategories(news);
 
   const setPage = (page: number) => pageDispatch({ type: "SET_PAGE", payload: { page: page } });
@@ -59,16 +59,28 @@ function ListView({ menuSelected }: ViewProps) {
   }, [page]);
 
   return (
-    <Container>
-      <TabBlock
-        categories={categories}
-        pageState={{ page, subscriptionPage, animateProgress }}
-        dispatch={pageDispatch}
-      />
-      <DetailedNews newsItem={news[page]} />
-      <LeftArrow src={leftArrow} onClick={decreasePage}></LeftArrow>
-      <RightArrow src={rightArrow} onClick={increasePage}></RightArrow>
-    </Container>
+    <>
+      {showSnackBar && <SubscribeSnackbar />}
+      {showAlert && <UnsubscribeAlert name={news[page].pressName} onUnsubscribe={handleUnsubscribe} />}
+      <Container>
+        <TabBlock
+          categories={categories}
+          pageState={{ page, subscriptionPage, animateProgress }}
+          dispatch={pageDispatch}
+        />
+        <DetailedNews
+          newsItem={news[page]}
+          onSubscribe={handleSubscribe}
+          onUnsubscribe={() => {
+            subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
+            subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: news[page].pressName } });
+          }}
+          isSubscribed={isSubscribed(news[page].pressName, subscription)}
+        />
+        <LeftArrow src={leftArrow} onClick={decreasePage}></LeftArrow>
+        <RightArrow src={rightArrow} onClick={increasePage}></RightArrow>
+      </Container>
+    </>
   );
 }
 

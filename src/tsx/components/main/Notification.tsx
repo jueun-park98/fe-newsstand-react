@@ -45,6 +45,7 @@ const BlurBackGround = styled.div`
   height: 100%;
   background-color: white;
   opacity: 0.7;
+  z-index: 10;
 `;
 
 const SnackBar = styled.div`
@@ -57,6 +58,7 @@ const SnackBar = styled.div`
   color: #fff;
   padding: 16px 24px;
   background-color: #4362d0;
+  z-index: 11;
 `;
 
 const AlertContainer = styled.div`
@@ -67,6 +69,7 @@ const AlertContainer = styled.div`
   font-size: 16px;
   font-weight: 500;
   border: 1px solid #d2dae0;
+  z-index: 10;
 `;
 
 const AlertContent = styled.div`

@@ -49,6 +49,12 @@ export interface ViewProps {
   handleUnsubscribe: (logoName: string) => Promise<void>;
 }
 
+export interface DetailedNewsProps extends NewsProps {
+  onSubscribe: (name: string) => void;
+  onUnsubscribe: (name: string) => void;
+  isSubscribed: boolean;
+}
+
 export interface RollingTextProps {
   news: News;
   index: number;
@@ -67,11 +73,8 @@ export interface AlertProps {
   onUnsubscribe: (name: string) => void;
 }
 
-export interface LogoBoxProps {
-  logo: {
-    src: string;
-    name: string;
-  };
+export interface SubscribeButtonProps {
+  name: string;
   onSubscribe: (name: string) => void;
   onUnsubscribe: (name: string) => void;
   isSubscribed: boolean;

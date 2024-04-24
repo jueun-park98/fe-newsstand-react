@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { LogoState, MENU_STATES, News, SubscribeAction, ViewProps } from "../../constants";
+import { LogoState, MENU_STATES, News, ViewProps } from "../../constants";
 import leftArrow from "../../../img/leftArrow.svg";
 import rightArrow from "../../../img/rightArrow.svg";
 import styled from "styled-components";
-import { decreaseIndex, increaseIndex } from "../../utils/Utils";
+import { decreaseIndex, increaseIndex, isSubscribed } from "../../utils/Utils";
 import { NewsContext } from "../provider/NewsProvider";
 import { SubscribeSnackbar, UnsubscribeAlert } from "./Notification";
-import LogoBox from "./LogoBox";
+import SubscribeButton from "./SubscribeButton";
 import { SubscribeContext } from "../provider/SubscribeProvider";
 
 const MAX_PAGE = 4;
@@ -20,10 +20,6 @@ const convertToLogo: (news: News) => LogoState = (news) => {
   return { src: news.logoImageSrc, name: news.pressName };
 };
 
-const isSubscribed = (logoName: string, subscription: News[]) => {
-  return subscription.some((item) => item.pressName === logoName);
-};
-
 const fillGridLogos = (logos: LogoState[], page: number, countPerPage: number) => {
   const pageLogos = logos.slice(page * countPerPage, (page + 1) * countPerPage);
   const fillCount = countPerPage - pageLogos.length;
@@ -32,16 +28,7 @@ const fillGridLogos = (logos: LogoState[], page: number, countPerPage: number) =
   return filledLogos;
 };
 
-const setShowAlert = (showAlert: boolean) =>
-  ({
-    type: "SET_SHOW_ALERT",
-    payload: { showAlert: showAlert },
-  } as SubscribeAction);
-const setAlertMessage = (alertMessage: string) =>
-  ({
-    type: "SET_ALERT_MESSAGE",
-    payload: { alertMessage: alertMessage },
-  } as SubscribeAction);
+const isEmptyObject = (object: object) => Object.keys(object).length === 0;
 
 function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubscribe }: ViewProps) {
   const { showSnackBar, showAlert, alertMessage } = subscribeState;
@@ -67,27 +54,26 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
       {showAlert && <UnsubscribeAlert name={alertMessage} onUnsubscribe={handleUnsubscribe} />}
       <Table>
         {fillGridLogos(logos, page, LOGO_COUNT_PER_PAGE).map((logo) => (
-          <LogoBox
-            logo={logo}
-            onSubscribe={handleSubscribe}
-            onUnsubscribe={() => {
-              subscribeDispatch(setAlertMessage(logo.name));
-              subscribeDispatch(setShowAlert(true));
-            }}
-            isSubscribed={isSubscribed(logo.name, subscription)}
-          />
+          <LogoBox>
+            {!isEmptyObject(logo) && (
+              <>
+                <Logo src={logo.src} name={logo.name} />
+                <SubscribeButton
+                  name={logo.name}
+                  onSubscribe={handleSubscribe}
+                  onUnsubscribe={() => {
+                    subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
+                    subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: logo.name } });
+                  }}
+                  isSubscribed={isSubscribed(logo.name, subscription)}
+                />
+              </>
+            )}
+          </LogoBox>
         ))}
       </Table>
-      <LeftArrow
-        page={page}
-        src={leftArrow}
-        onClick={() => setPage(decreaseIndex(page, MAX_PAGE))}
-      />
-      <RightArrow
-        page={page}
-        src={rightArrow}
-        onClick={() => setPage(increaseIndex(page, MAX_PAGE))}
-      />
+      <LeftArrow page={page} src={leftArrow} onClick={() => setPage(decreaseIndex(page, MAX_PAGE))} />
+      <RightArrow page={page} src={rightArrow} onClick={() => setPage(increaseIndex(page, MAX_PAGE))} />
     </>
   );
 }
@@ -98,6 +84,32 @@ const Table = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   border: 0.0714em solid #d2dae0;
+`;
+
+const LogoBox = styled.div`
+  width: 100%;
+  height: 6.8928em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 0.0714em solid #d2dae0;
+
+  > button {
+    display: none;
+  }
+
+  &:hover > img {
+    display: none;
+  }
+
+  &:hover > button {
+    display: flex;
+    position: absolute;
+  }
+`;
+
+const Logo = styled.img<{ name: string }>`
+  height: 1.4286em;
 `;
 
 const LeftArrow = styled.img<{ page: number }>`
