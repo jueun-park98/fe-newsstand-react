@@ -21,7 +21,7 @@ const initialPageState = {
 export const pageReducer = (state: PageState, { type, payload }: PageAction) => {
   switch (type) {
     case "SET_PAGE":
-      if (payload && payload.page != undefined)
+      if (payload && payload.page !== undefined)
         return { ...state, page: payload.page, animateProgress: false };
       return state;
     case "SET_SUBSCRIPTION_PAGE":

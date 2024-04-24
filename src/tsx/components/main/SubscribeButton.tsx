@@ -20,10 +20,10 @@ function SubscribeButton({ name, onSubscribe, onUnsubscribe, isSubscribed }: Sub
 }
 
 const ClickButton = styled.button`
-  height: 20px;
+  height: 1.4286em;
   background-color: #fff;
-  border: 1px solid #d2dae0;
-  border-radius: 50px;
+  border: 0.0714em solid #d2dae0;
+  border-radius: 3.5714em;
   color: #879298;
   display: flex;
   justify-content: center;
@@ -32,19 +32,19 @@ const ClickButton = styled.button`
 `;
 
 const PlusImage = styled.img`
-  width: 12px;
-  height: 12px;
-  margin-left: -4px;
-  margin-right: 2px;
+  width: 0.8571em;
+  height: 0.8571em;
+  margin-left: -0.2857em;
+  margin-right: 0.1429em;
 `;
 
 const UnsubscribeImage = styled.img`
-  width: 12px;
-  height: 12px;
-  margin-left: -4px;
-  margin-right: 2px;
+  width: 0.8571em;
+  height: 0.8571em;
+  margin-left: -0.2857em;
+  margin-right: 0.1429em;
   position: relative;
-  left: 3px;
+  left: 0.2143em;
   transform: rotate(45deg);
 `;
 

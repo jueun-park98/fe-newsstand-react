@@ -40,7 +40,7 @@ describe("DetailedNews 렌더 테스트", () => {
       />
     );
 
-    //thenm
+    //then
     expect(screen.getByAltText("logo")).toHaveAttribute("src", newsItem.logoImageSrc);
     expect(screen.getByText(newsItem.editedTime)).toBeInTheDocument();
     expect(screen.getByText(newsItem.headline.title)).toHaveAttribute("href", newsItem.headline.href);

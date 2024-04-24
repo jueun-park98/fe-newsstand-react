@@ -53,10 +53,10 @@ const SnackBar = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 16px;
+  font-size: 1.14286em;
   font-weight: 500;
   color: #fff;
-  padding: 16px 24px;
+  padding: 1.14286em 1.71429em;
   background-color: #4362d0;
   z-index: 11;
 `;
@@ -66,22 +66,22 @@ const AlertContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 16px;
+  font-size: 1.14286em;
   font-weight: 500;
-  border: 1px solid #d2dae0;
+  border: 0.07143em solid #d2dae0;
   z-index: 10;
 `;
 
 const AlertContent = styled.div`
-  width: 320px;
-  height: 92px;
+  width: 22.85714em;
+  height: 6.57143em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #fff;
   color: #5f6e76;
-  border: 1px solid #d2dae0;
+  border: 0.07143em solid #d2dae0;
 
   & > span > strong {
     font-size: 700;
@@ -90,7 +90,7 @@ const AlertContent = styled.div`
 `;
 
 const AlertClickable = styled.div`
-  height: 48px;
+  height: 3.42857em;
   display: flex;
   background-color: #f5f7f9;
 `;
@@ -101,7 +101,7 @@ const AlertSubmit = styled.div`
   justify-content: center;
   align-items: center;
   color: #5f6e76;
-  border: 1px solid #d2dae0;
+  border: 0.07143em solid #d2dae0;
 
   &:hover {
     text-decoration: underline;
@@ -114,7 +114,7 @@ const AlertCancel = styled.div`
   justify-content: center;
   align-items: center;
   color: #14212b;
-  border: 1px solid #d2dae0;
+  border: 0.07143em solid #d2dae0;
 
   &:hover {
     text-decoration: underline;

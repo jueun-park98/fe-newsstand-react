@@ -6,7 +6,7 @@ import { SubscribeContext } from '../provider/SubscribeProvider';
 describe('SubscribeSnackbar 렌더 테스트', () => {
   it('정해진 메시지를 담은 스낵바가 렌더링 되는지 확인', () => {
     //given
-    const message = /내가 구독한 언론사에 추가되었습니다./i;
+    const message = "내가 구독한 언론사에 추가되었습니다.";
 
     //when
     render(<SubscribeSnackbar />);
