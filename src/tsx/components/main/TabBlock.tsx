@@ -117,6 +117,7 @@ const increaseWidth = keyframes`
 `;
 
 const Container = styled.div`
+  width: 100%;
   height: 2.8571em;
   background-color: #f5f7f9;
   border-bottom: 0.0714em solid rgb(210, 218, 224);
@@ -130,7 +131,7 @@ const Container = styled.div`
 `;
 
 const ActiveTab = styled.div`
-  width: 12.8571em;
+  flex: 0 0 12.8571em;
   background-color: #7890e7;
   color: #fff;
   font-weight: 700;
