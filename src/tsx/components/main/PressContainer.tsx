@@ -105,14 +105,14 @@ function PressContainer() {
         </ViewMenu>
       </Menu>
       <View>
-        {SelectedView ? (
+        {SelectedView && (
           <SelectedView
             menuSelected={menuSelected}
             subscribeState={subscribeState}
             handleSubscribe={handleSubscribeClick}
             handleUnsubscribe={handleUnsubscribeClick}
           />
-        ) : null}
+        )}
       </View>
     </div>
   );

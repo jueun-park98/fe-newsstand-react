@@ -1,4 +1,3 @@
-import constructWithOptions from "styled-components/dist/constructors/constructWithOptions";
 import { pageReducer } from "./ListView";
 
 describe('pageReducer 액션 테스트', () => {

@@ -9,6 +9,7 @@ import { SubscribeSnackbar, UnsubscribeAlert } from "./Notification";
 import SubscribeButton from "./SubscribeButton";
 import { SubscribeContext } from "../provider/SubscribeProvider";
 
+const FIRST_PAGE = 0;
 const MAX_PAGE = 4;
 const LOGO_COUNT_PER_PAGE = 24;
 
@@ -34,7 +35,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
   const { showSnackBar, showAlert, alertMessage } = subscribeState;
   const [{ news, subscription }] = useContext(NewsContext);
   const [_, subscribeDispatch] = useContext(SubscribeContext);
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(FIRST_PAGE);
   const [logos, setLogos] = useState<LogoState[]>([]);
 
   const calculateMaxPage = (items: LogoState[]) => Math.ceil(items.length / LOGO_COUNT_PER_PAGE);
@@ -47,6 +48,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
     if (menuSelected === MENU_STATES.allPress) {
       const logosToSave = shuffle(news).slice(0, MAX_PAGE * LOGO_COUNT_PER_PAGE);
       setLogos(logosToSave);
+      setPage(FIRST_PAGE);
     }
     if (menuSelected === MENU_STATES.subscribedPress) {
       const logosToSave = subscription.map(convertToLogo);

@@ -88,28 +88,24 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
     <>
       {showSnackBar && <SubscribeSnackbar />}
       {showAlert && <UnsubscribeAlert name={newsItem.pressName} onUnsubscribe={handleUnsubscribe} />}
-      <Container>
-        <TabBlock
-          menuSelected={menuSelected}
-          categories={getCategories(news)}
-          pageState={{ page, subscriptionPage, animateProgress }}
-          dispatch={pageDispatch}
-        />
-        <DetailedNews
-          newsItem={newsItem}
-          onSubscribe={handleSubscribe}
-          onUnsubscribe={() => handleUnsubscribeButtonClick(newsItem.pressName)}
-          isSubscribed={isSubscribed(newsItem.pressName, subscription)}
-        />
-        <LeftArrow
-          src={leftArrow}
-          onClick={handleDecreaseClick}
-        ></LeftArrow>
-        <RightArrow
-          src={rightArrow}
-          onClick={handleIncreaseClick}
-        ></RightArrow>
-      </Container>
+      {newsItem && (
+        <Container>
+          <TabBlock
+            menuSelected={menuSelected}
+            categories={getCategories(news)}
+            pageState={{ page, subscriptionPage, animateProgress }}
+            dispatch={pageDispatch}
+          />
+          <DetailedNews
+            newsItem={newsItem}
+            onSubscribe={handleSubscribe}
+            onUnsubscribe={() => handleUnsubscribeButtonClick(newsItem.pressName)}
+            isSubscribed={isSubscribed(newsItem.pressName, subscription)}
+          />
+          <LeftArrow src={leftArrow} onClick={handleDecreaseClick}></LeftArrow>
+          <RightArrow src={rightArrow} onClick={handleIncreaseClick}></RightArrow>
+        </Container>
+      )}
     </>
   );
 }
