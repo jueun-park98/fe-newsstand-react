@@ -80,6 +80,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
       </Table>
       <LeftArrow
         page={page}
+        maxPage={FIRST_PAGE}
         src={leftArrow}
         onClick={() => setPage(decreaseIndex(page, MAX_PAGE))}
       />
@@ -127,11 +128,11 @@ const Logo = styled.img<{ name: string }>`
   height: 1.4286em;
 `;
 
-const LeftArrow = styled.img<{ page: number }>`
+const LeftArrow = styled.img<{ page: number, maxPage: number }>`
   position: relative;
   top: -15.0714em;
   left: -7.1429em;
-  visibility: ${(props) => (props.page === 0 ? "hidden" : "visible")};
+  visibility: ${(props) => (props.page === 0 || props.maxPage === 0 ? "hidden" : "visible")};
 `;
 
 const RightArrow = styled.img<{ page: number, maxPage: number }>`
