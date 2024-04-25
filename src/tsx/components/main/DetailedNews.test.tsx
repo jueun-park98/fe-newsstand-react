@@ -41,12 +41,33 @@ describe("DetailedNews 렌더 테스트", () => {
     );
 
     //then
-    expect(screen.getByAltText("logo")).toHaveAttribute("src", newsItem.logoImageSrc);
+    expect(screen.getByText(newsItem.headline.title)).toBeInTheDocument();
+    newsItem.sideNews.forEach((sideNews) => {
+      expect(screen.getByText(sideNews.title)).toBeInTheDocument();
+    });
     expect(screen.getByText(newsItem.editedTime)).toBeInTheDocument();
+    expect(screen.getByText(`${newsItem.pressName} 언론사에서 직접 편집한 뉴스입니다.`)).toBeInTheDocument();
+  });
+
+  it("DetailedNews의 하위 컴포넌트 attributes에 값이 저장되는지 확인 ", () => {
+    //given
+    const { newsItem, onSubscribe, onUnsubscribe, isSubscribed } = mockNewsItem;
+
+    //when
+    render(
+      <DetailedNews
+        newsItem={newsItem}
+        onSubscribe={onSubscribe}
+        onUnsubscribe={onUnsubscribe}
+        isSubscribed={isSubscribed}
+      />
+    );
+
+    //then
+    expect(screen.getByAltText("logo")).toHaveAttribute("src", newsItem.logoImageSrc);
     expect(screen.getByText(newsItem.headline.title)).toHaveAttribute("href", newsItem.headline.href);
     newsItem.sideNews.forEach((sideNews) => {
       expect(screen.getByText(sideNews.title)).toHaveAttribute("href", sideNews.href);
     });
-    expect(screen.getByText(`${newsItem.pressName} 언론사에서 직접 편집한 뉴스입니다.`)).toBeInTheDocument();
   });
 });
