@@ -21,8 +21,7 @@ const initialPageState = {
 export const pageReducer = (state: PageState, { type, payload }: PageAction) => {
   switch (type) {
     case "SET_PAGE":
-      if (payload && payload.page !== undefined)
-        return { ...state, page: payload.page, animateProgress: false };
+      if (payload && payload.page !== undefined) return { ...state, page: payload.page, animateProgress: false };
       return state;
     case "SET_SUBSCRIPTION_PAGE":
       if (payload && payload.subscriptionPage !== undefined)
@@ -67,6 +66,14 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
     subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
     subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: name } });
   };
+  const handleIncreaseClick = () => {
+    if (menuSelected === MENU_STATES.allPress) increasePage();
+    if (menuSelected === MENU_STATES.subscribedPress) increaseSubscriptionPage();
+  };
+  const handleDecreaseClick = () => {
+    if (menuSelected === MENU_STATES.allPress) decreasePage();
+    if (menuSelected === MENU_STATES.subscribedPress) decreaseSubscriptionPage();
+  };
 
   useEffect(() => {
     if (menuSelected === MENU_STATES.allPress) setNewsItem(news[page]);
@@ -96,17 +103,11 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
         />
         <LeftArrow
           src={leftArrow}
-          onClick={() => {
-            if (menuSelected === MENU_STATES.allPress) decreasePage();
-            if (menuSelected === MENU_STATES.subscribedPress) decreaseSubscriptionPage();
-          }}
+          onClick={handleDecreaseClick}
         ></LeftArrow>
         <RightArrow
           src={rightArrow}
-          onClick={() => {
-            if (menuSelected === MENU_STATES.allPress) increasePage();
-            if (menuSelected === MENU_STATES.subscribedPress) increaseSubscriptionPage();
-          }}
+          onClick={handleIncreaseClick}
         ></RightArrow>
       </Container>
     </>

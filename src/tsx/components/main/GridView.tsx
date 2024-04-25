@@ -37,6 +37,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
   const [page, setPage] = useState<number>(0);
   const [logos, setLogos] = useState<LogoState[]>([]);
 
+  const calculateMaxPage = (items: LogoState[]) => Math.ceil(items.length / LOGO_COUNT_PER_PAGE);
   const handleUnsubscribeButtonClick = (logoName: string) => {
     subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
     subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: logoName } });
@@ -50,6 +51,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
     if (menuSelected === MENU_STATES.subscribedPress) {
       const logosToSave = subscription.map(convertToLogo);
       setLogos(logosToSave);
+      page > calculateMaxPage(logosToSave) - 1 && setPage(calculateMaxPage(logosToSave) - 1);
     }
   }, [news, subscription, menuSelected]);
 
@@ -81,6 +83,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
       />
       <RightArrow
         page={page}
+        maxPage={calculateMaxPage(logos)}
         src={rightArrow}
         onClick={() => setPage(increaseIndex(page, MAX_PAGE))}
       />
@@ -129,11 +132,11 @@ const LeftArrow = styled.img<{ page: number }>`
   visibility: ${(props) => (props.page === 0 ? "hidden" : "visible")};
 `;
 
-const RightArrow = styled.img<{ page: number }>`
+const RightArrow = styled.img<{ page: number, maxPage: number }>`
   position: relative;
   top: -15.0714em;
   left: 70em;
-  visibility: ${(props) => (props.page === MAX_PAGE - 1 ? "hidden" : "visible")};
+  visibility: ${(props) => (props.page === props.maxPage - 1 ? "hidden" : "visible")};
 `;
 
 export default GridView;

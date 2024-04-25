@@ -29,8 +29,8 @@ function DetailedNews({ newsItem, onSubscribe, onUnsubscribe, isSubscribed }: De
           <HeadlineTitle href={href}>{title}</HeadlineTitle>
         </Headline>
         <Sidenews>
-          {sideNews.map((element) => (
-            <SideNewsTitle href={element.href}>{element.title}</SideNewsTitle>
+          {sideNews.map((element, index) => (
+            <SideNewsTitle key={`sidenews-${index}`} href={element.href}>{element.title}</SideNewsTitle>
           ))}
           <span>{pressName} 언론사에서 직접 편집한 뉴스입니다.</span>
         </Sidenews>
