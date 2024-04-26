@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { LogoState, MENU_STATES, News, ViewProps } from "../../constants";
-import leftArrow from "../../../img/leftArrow.svg";
-import rightArrow from "../../../img/rightArrow.svg";
+import { LogoState, MENU_STATES, News, ViewProps } from "../../../constants";
+import leftArrow from "../../../../img/leftArrow.svg";
+import rightArrow from "../../../../img/rightArrow.svg";
 import styled from "styled-components";
-import { decreaseIndex, increaseIndex, isSubscribed } from "../../utils/Utils";
-import { NewsContext } from "../provider/NewsProvider";
-import { SubscribeSnackbar, UnsubscribeAlert } from "./Notification";
-import SubscribeButton from "./SubscribeButton";
-import { SubscribeContext } from "../provider/SubscribeProvider";
+import { decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils";
+import { NewsContext } from "../../provider/NewsProvider";
+import { SubscribeSnackbar, UnsubscribeAlert } from "../Notification";
+import SubscribeButton from "../SubscribeButton";
+import { SubscribeContext } from "../../provider/SubscribeProvider";
 
 const FIRST_PAGE = 0;
 const MAX_PAGE = 4;
@@ -80,7 +80,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
       </Table>
       <LeftArrow
         page={page}
-        maxPage={FIRST_PAGE}
+        maxPage={calculateMaxPage(logos)}
         src={leftArrow}
         onClick={() => setPage(decreaseIndex(page, MAX_PAGE))}
       />

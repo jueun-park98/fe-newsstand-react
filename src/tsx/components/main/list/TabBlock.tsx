@@ -1,12 +1,12 @@
-import { increaseIndex, isInRange } from "../../utils/Utils";
+import { increaseIndex, isInRange } from "../../../utils/Utils";
 import styled, { css, keyframes } from "styled-components";
 import {
   AllPressTabsProps,
   MENU_STATES,
   SubscribedPressTabsProps,
   TabProps,
-} from "../../constants";
-import { NewsContext } from "../provider/NewsProvider";
+} from "../../../constants";
+import { NewsContext } from "../../provider/NewsProvider";
 import { useContext, useEffect } from "react";
 
 function AllPressTabs({

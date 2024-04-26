@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { DetailedNewsProps } from "../../constants";
-import SubscribeButton from "./SubscribeButton";
+import { DetailedNewsProps } from "../../../constants";
+import SubscribeButton from "../SubscribeButton";
 
 function DetailedNews({ newsItem, onSubscribe, onUnsubscribe, isSubscribed }: DetailedNewsProps) {
   const {

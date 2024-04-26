@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import DetailedNews from "./DetailedNews";
-import { DetailedNewsProps } from "../../constants";
+import { DetailedNewsProps } from "../../../constants";
 
 const mockNewsItem: DetailedNewsProps = {
   newsItem: {

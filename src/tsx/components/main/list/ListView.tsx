@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import leftArrow from "../../../img/leftArrow.svg";
-import rightArrow from "../../../img/rightArrow.svg";
-import { Category, MENU_STATES, News, PageAction, PageState, ViewProps } from "../../constants";
+import leftArrow from "../../../../img/leftArrow.svg";
+import rightArrow from "../../../../img/rightArrow.svg";
+import { Category, MENU_STATES, News, PageAction, PageState, ViewProps } from "../../../constants";
 import { useContext, useEffect, useReducer, useState } from "react";
-import { decreaseIndex, increaseIndex, isSubscribed } from "../../utils/Utils";
+import { decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils";
 import DetailedNews from "./DetailedNews";
-import { NewsContext } from "../provider/NewsProvider";
+import { NewsContext } from "../../provider/NewsProvider";
 import TabBlock from "./TabBlock";
-import { SubscribeContext } from "../provider/SubscribeProvider";
-import { SubscribeSnackbar, UnsubscribeAlert } from "./Notification";
+import { SubscribeContext } from "../../provider/SubscribeProvider";
+import { SubscribeSnackbar, UnsubscribeAlert } from "../Notification";
 
 const FIRST_INDEX = 0;
 
