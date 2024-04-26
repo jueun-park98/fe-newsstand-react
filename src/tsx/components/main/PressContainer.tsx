@@ -41,8 +41,8 @@ function PressContainer() {
     }
     try {
       await postSubscription(newsItem);
-      subscribeDispatch(setShowSnackBar(true));
       const newSubscription = await fetchSubscription();
+      subscribeDispatch(setShowSnackBar(true));
       setTimeout(() => {
         setNewsState({ news, subscription: newSubscription as News[] });
         subscribeDispatch(setShowSnackBar(false));

@@ -12,6 +12,17 @@ const ITEM_TOP_START = 0.5714;
 const ITEM_TOP_END = -2.0714;
 const ITEM_TOP_INCREMENT = 1.4286;
 
+function RollingText({ news: { pressName, headline }, index, animate, setAnimate }: RollingTextProps) {
+  return (
+    <>
+      <RollingTextContainer animate={animate} index={index} onAnimationEnd={() => setAnimate(false)}>
+        <Press>{pressName}</Press>
+        <Title href={headline.href}>{headline.title}</Title>
+      </RollingTextContainer>
+    </>
+  );
+}
+
 function RollingContainer() {
   const [{ news }] = useContext(NewsContext);
   const [leftIndex, setLeftIndex] = useState<number>(LEFT_START_INDEX);
@@ -46,40 +57,21 @@ function RollingContainer() {
   return (
     <Container>
       <TextBox>
-        {news.slice(leftIndex - 1, leftIndex + 1).map((element, index) =>
-          renderRollingText({
-            news: element,
-            index,
-            animate: animateLeft,
-            setAnimate: setAnimateLeft,
-          })
-        )}
+        {news.slice(leftIndex - 1, leftIndex + 1).map((element, index) => (
+          <RollingText news={element} index={index} animate={animateLeft} setAnimate={setAnimateLeft} />
+        ))}
       </TextBox>
       <TextBox>
         {news
           .slice(rightIndex, rightIndex + 2)
           .reverse()
-          .map((element, index) =>
-            renderRollingText({
-              news: element,
-              index,
-              animate: animateRight,
-              setAnimate: setAnimateRight,
-            })
-          )}
+          .map((element, index) => (
+            <RollingText news={element} index={index} animate={animateRight} setAnimate={setAnimateRight} />
+          ))}
       </TextBox>
     </Container>
   );
 }
-
-const renderRollingText = ({ news, index, animate, setAnimate }: RollingTextProps) => {
-  return (
-    <RollingText animate={animate} index={index} onAnimationEnd={() => setAnimate(false)}>
-      <Press>{news.pressName}</Press>
-      <Title href={news.headline.href}>{news.headline.title}</Title>
-    </RollingText>
-  );
-};
 
 const rollingAnimation = keyframes`
   from {
@@ -107,7 +99,7 @@ const TextBox = styled.div`
   overflow: hidden;
 `;
 
-const RollingText = styled.div<{ animate: boolean; index: number }>`
+const RollingTextContainer = styled.div<{ animate: boolean; index: number }>`
   position: relative;
   display: flex;
   ${({ animate }) =>
@@ -117,9 +109,7 @@ const RollingText = styled.div<{ animate: boolean; index: number }>`
       animation-fill-mode: forwards;
     `};
   top: ${({ animate, index }) =>
-    animate
-      ? `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}em;`
-      : `${ITEM_TOP_END + ITEM_TOP_INCREMENT * index}em;`};
+    animate ? `${ITEM_TOP_START + ITEM_TOP_INCREMENT * index}em;` : `${ITEM_TOP_END + ITEM_TOP_INCREMENT * index}em;`};
 `;
 
 const Press = styled.span`
