@@ -13,8 +13,7 @@ function App() {
   useEffect(() => {
     const loadNews = async () => {
       try {
-        const loadedNews = await fetchNews();
-        const loadedSubscription = await fetchSubscription();
+        const [loadedNews, loadedSubscription] = await Promise.all([fetchNews(), fetchSubscription()]);
         setNewsState({ news: loadedNews as News[], subscription: loadedSubscription as News[] });
       } catch (error) {
         console.error(`Server request failed!: ${error}`);
