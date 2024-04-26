@@ -55,31 +55,33 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
   const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(pageReducer, initialPageState);
   const [newsItem, setNewsItem] = useState<News>(news[page]);
 
-  const setPage = (page: number) => pageDispatch({ type: "SET_PAGE", payload: { page: page } });
-  const increasePage = () => setPage(increaseIndex(page, news.length));
-  const decreasePage = () => setPage(decreaseIndex(page, news.length));
-  const setSubscriptionPage = (subscriptionPage: number) =>
-    pageDispatch({ type: "SET_SUBSCRIPTION_PAGE", payload: { subscriptionPage } });
-  const increaseSubscriptionPage = () => setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
-  const decreaseSubscriptionPage = () => setSubscriptionPage(decreaseIndex(subscriptionPage, subscription.length));
+  const setPage = (pageType: "page" | "subscriptionPage", operation: "increase" | "decrease") => {
+    const currentPage = pageType === "page" ? page : subscriptionPage;
+    const totalLength = pageType === "page" ? news.length : subscription.length;
+    const updatedPage =
+      operation === "increase" ? increaseIndex(currentPage, totalLength) : decreaseIndex(currentPage, totalLength);
+
+    pageDispatch({
+      type: pageType === "page" ? "SET_PAGE" : "SET_SUBSCRIPTION_PAGE",
+      payload: pageType === "page" ? { page: updatedPage } : { subscriptionPage: updatedPage },
+    });
+  };
+
+  const handlePageClick = (operation: "increase" | "decrease") => {
+    if (menuSelected === MENU_STATES.allPress) setPage("page", operation);
+    if (menuSelected === MENU_STATES.subscribedPress) setPage("subscriptionPage", operation);
+  };
+
   const handleUnsubscribeButtonClick = (name: string) => {
     subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
     subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: name } });
-  };
-  const handleIncreaseClick = () => {
-    if (menuSelected === MENU_STATES.allPress) increasePage();
-    if (menuSelected === MENU_STATES.subscribedPress) increaseSubscriptionPage();
-  };
-  const handleDecreaseClick = () => {
-    if (menuSelected === MENU_STATES.allPress) decreasePage();
-    if (menuSelected === MENU_STATES.subscribedPress) decreaseSubscriptionPage();
   };
 
   useEffect(() => {
     if (menuSelected === MENU_STATES.allPress) setNewsItem(news[page]);
     if (menuSelected === MENU_STATES.subscribedPress) setNewsItem(subscription[subscriptionPage]);
     if (subscriptionPage >= subscription.length) {
-      setSubscriptionPage(FIRST_INDEX);
+      setPage("subscriptionPage", "increase");
       setNewsItem(subscription[FIRST_INDEX]);
     }
   }, [news, subscription, menuSelected, page, subscriptionPage]);
@@ -102,8 +104,8 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
             onUnsubscribe={() => handleUnsubscribeButtonClick(newsItem.pressName)}
             isSubscribed={isSubscribed(newsItem.pressName, subscription)}
           />
-          <LeftArrow src={leftArrow} onClick={handleDecreaseClick}></LeftArrow>
-          <RightArrow src={rightArrow} onClick={handleIncreaseClick}></RightArrow>
+          <LeftArrow src={leftArrow} onClick={() => handlePageClick("decrease")}></LeftArrow>
+          <RightArrow src={rightArrow} onClick={() => handlePageClick("increase")}></RightArrow>
         </Container>
       )}
     </>
