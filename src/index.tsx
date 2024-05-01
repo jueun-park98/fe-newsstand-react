@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./css/index.css";
-import App from "./tsx/components/App";
-import reportWebVitals from "./tsx/env/reportWebVitals";
-import { NewsProvider } from "./tsx/components/provider/NewsProvider";
+import App from "./view/components/App";
+import reportWebVitals from "./view/env/reportWebVitals";
+import { NewsProvider } from "./view/components/provider/NewsProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
