@@ -8,6 +8,9 @@ import { NewsContext } from "../../provider/NewsProvider";
 import { SubscribeSnackbar, UnsubscribeAlert } from "../Notification";
 import SubscribeButton from "../SubscribeButton";
 import { SubscribeContext } from "../../provider/SubscribeProvider";
+import useSubscription from "../../../hooks/useSubscription";
+import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
+import { useNavigation } from '../../provider/NavigationProvider';
 
 const FIRST_PAGE = 0;
 const MAX_PAGE = 4;
@@ -31,8 +34,13 @@ const fillGridLogos = (logos: LogoState[], page: number, countPerPage: number) =
 
 const isEmptyObject = (object: object) => Object.keys(object).length === 0;
 
-function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubscribe }: ViewProps) {
-  const { showSnackBar, showAlert, alertMessage } = subscribeState;
+function GridView() {
+  const {
+    subscribeState: { showSnackBar, showAlert, alertMessage },
+    handleSubscribeClick,
+    handleUnsubscribeClick,
+  } = useSubscriptionEvents();
+  const { menuSelected } = useNavigation();
   const [{ news, subscription }] = useContext(NewsContext);
   const [_, subscribeDispatch] = useContext(SubscribeContext);
   const [page, setPage] = useState<number>(FIRST_PAGE);
@@ -60,7 +68,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
   return (
     <>
       {showSnackBar && <SubscribeSnackbar />}
-      {showAlert && <UnsubscribeAlert name={alertMessage} onUnsubscribe={handleUnsubscribe} />}
+      {showAlert && <UnsubscribeAlert name={alertMessage} onUnsubscribe={handleUnsubscribeClick} />}
       <Table>
         {fillGridLogos(logos, page, LOGO_COUNT_PER_PAGE).map((logo) => (
           <LogoBox>
@@ -69,7 +77,7 @@ function GridView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
                 <Logo src={logo.src} name={logo.name} />
                 <SubscribeButton
                   name={logo.name}
-                  onSubscribe={handleSubscribe}
+                  onSubscribe={handleSubscribeClick}
                   onUnsubscribe={() => handleUnsubscribeButtonClick(logo.name)}
                   isSubscribed={isSubscribed(logo.name, subscription)}
                 />
@@ -128,14 +136,14 @@ const Logo = styled.img<{ name: string }>`
   height: 1.4286em;
 `;
 
-const LeftArrow = styled.img<{ page: number, maxPage: number }>`
+const LeftArrow = styled.img<{ page: number; maxPage: number }>`
   position: relative;
   top: -15.0714em;
   left: -7.1429em;
   visibility: ${(props) => (props.page === 0 || props.maxPage === 0 ? "hidden" : "visible")};
 `;
 
-const RightArrow = styled.img<{ page: number, maxPage: number }>`
+const RightArrow = styled.img<{ page: number; maxPage: number }>`
   position: relative;
   top: -15.0714em;
   left: 70em;

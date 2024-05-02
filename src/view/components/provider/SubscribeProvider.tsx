@@ -9,6 +9,17 @@ interface SubscribeState {
 
 type SubscribeContextType = [SubscribeState, Dispatch<SubscribeAction>];
 
+export const setShowSnackBar = (showSnackBar: boolean) =>
+  ({
+    type: "SET_SHOW_SNACKBAR",
+    payload: { showSnackBar: showSnackBar },
+  } as SubscribeAction);
+export const setShowAlert = (showAlert: boolean) =>
+  ({
+    type: "SET_SHOW_ALERT",
+    payload: { showAlert: showAlert },
+  } as SubscribeAction);
+
 export const SubscribeContext = React.createContext<SubscribeContextType>([
   { showSnackBar: false, showAlert: false, alertMessage: "" },
   () => {},

@@ -44,9 +44,6 @@ export interface PressProps {
 
 export interface ViewProps {
   menuSelected: string;
-  subscribeState: SubscribeState;
-  handleSubscribe: (logoName: string) => Promise<void>;
-  handleUnsubscribe: (logoName: string) => Promise<void>;
 }
 
 export interface DetailedNewsProps extends NewsProps {
