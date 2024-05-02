@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+import { useQuery } from "react-query";
 import Header from "./header/Header";
 import RollingContainer from "./headline/RollingContainer";
 import PressContainer from "./main/PressContainer";
@@ -6,30 +7,34 @@ import { fetchNews, fetchSubscription } from "../api/NewsAPI";
 import { NewsContext } from "./provider/NewsProvider";
 import { News } from "../constants";
 import { SubscribeProvider } from "./provider/SubscribeProvider";
+import { NavigationProvider } from './provider/NavigationProvider';
 
 function App() {
   const [_, setNewsState] = useContext(NewsContext);
 
-  useEffect(() => {
-    const loadNews = async () => {
-      try {
-        const [loadedNews, loadedSubscription] = await Promise.all([fetchNews(), fetchSubscription()]);
-        setNewsState({ news: loadedNews as News[], subscription: loadedSubscription as News[] });
-      } catch (error) {
-        console.error(`Server request failed!: ${error}`);
-        alert("서버 요청이 실패하였습니다!");
-      }
-    };
+  const { data: loadedNews, error: newsError, isLoading: newsLoading } = useQuery("news", fetchNews);
+  const { data: loadedSubscription, error: subscriptionError, isLoading: subscriptionLoading } = useQuery("subscription", fetchSubscription);
 
-    loadNews();
-  }, []);
+  useEffect(() => {
+    if (!newsLoading && !subscriptionLoading && !newsError && !subscriptionError) {
+      setNewsState({ news: loadedNews as News[], subscription: loadedSubscription as News[] });
+    }
+  }, [loadedNews, loadedSubscription, newsLoading, subscriptionLoading, newsError, subscriptionError]);
+
+  if (newsLoading || subscriptionLoading) return <div>Loading...</div>;
+  if (newsError || subscriptionError) {
+    console.error(`Server request failed!: ${newsError || subscriptionError}`);
+    return <div>Error!</div>;
+  }
 
   return (
     <div>
       <Header />
       <RollingContainer />
       <SubscribeProvider>
-        <PressContainer />
+        <NavigationProvider>
+          <PressContainer />
+        </NavigationProvider>
       </SubscribeProvider>
     </div>
   );
