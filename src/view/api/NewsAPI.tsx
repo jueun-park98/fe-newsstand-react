@@ -2,7 +2,7 @@ import { News } from "../constants";
 
 const SERVER = process.env.REACT_APP_SERVER;
 
-export const fetchNews: () => Promise<object[]> = async () => {
+export const fetchNews: () => Promise<News[]> = async () => {
   const request = {
     method: "GET",
     headers: {
@@ -16,7 +16,7 @@ export const fetchNews: () => Promise<object[]> = async () => {
   return news;
 };
 
-export const fetchSubscription: () => Promise<object[]> = async () => {
+export const fetchSubscription: () => Promise<News[]> = async () => {
   const request = {
     method: "GET",
     headers: {

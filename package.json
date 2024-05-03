@@ -48,6 +48,7 @@
   "type": "module",
   "devDependencies": {
     "cors": "^2.8.5",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "react-query": "^3.39.3"
   }
 }

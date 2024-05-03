@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { DetailedNewsProps } from "../../../constants";
-import SubscribeButton from "../SubscribeButton";
+import SubscribeButton from "../wrapper/SubscribeButton";
 
 function DetailedNews({ newsItem, onSubscribe, onUnsubscribe, isSubscribed }: DetailedNewsProps) {
   const {
@@ -30,7 +30,9 @@ function DetailedNews({ newsItem, onSubscribe, onUnsubscribe, isSubscribed }: De
         </Headline>
         <Sidenews>
           {sideNews.map((element, index) => (
-            <SideNewsTitle key={`sidenews-${index}`} href={element.href}>{element.title}</SideNewsTitle>
+            <SideNewsTitle key={`sidenews-${index}`} href={element.href}>
+              {element.title}
+            </SideNewsTitle>
           ))}
           <span>{pressName} 언론사에서 직접 편집한 뉴스입니다.</span>
         </Sidenews>

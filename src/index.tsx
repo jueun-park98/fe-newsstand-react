@@ -1,15 +1,19 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./css/index.css";
 import App from "./view/components/App";
 import reportWebVitals from "./view/env/reportWebVitals";
 import { NewsProvider } from "./view/components/provider/NewsProvider";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-  <NewsProvider>
-    <App />
-  </NewsProvider>
+  <QueryClientProvider client={queryClient}>
+    <NewsProvider>
+      <App />
+    </NewsProvider>
+  </QueryClientProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

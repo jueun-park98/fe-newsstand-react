@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { SubscribeButtonProps } from "../../constants";
-import plusSymbol from "../../../img/plusSymbol.svg";
+import { SubscribeButtonProps } from "../../../constants";
+import plusSymbol from "../../../../img/plusSymbol.svg";
 
 function SubscribeButton({ name, onSubscribe, onUnsubscribe, isSubscribed }: SubscribeButtonProps) {
   return (

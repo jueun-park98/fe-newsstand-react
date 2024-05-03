@@ -8,7 +8,9 @@ import DetailedNews from "./DetailedNews";
 import { NewsContext } from "../../provider/NewsProvider";
 import TabBlock from "./TabBlock";
 import { SubscribeContext } from "../../provider/SubscribeProvider";
-import { SubscribeSnackbar, UnsubscribeAlert } from "../Notification";
+import { SubscribeSnackbar, UnsubscribeAlert } from "../wrapper/Notification";
+import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
+import { useNavigation } from "../../provider/NavigationProvider";
 
 const FIRST_INDEX = 0;
 
@@ -21,7 +23,8 @@ const initialPageState = {
 export const pageReducer = (state: PageState, { type, payload }: PageAction) => {
   switch (type) {
     case "SET_PAGE":
-      if (payload && payload.page !== undefined) return { ...state, page: payload.page, animateProgress: false };
+      if (payload && payload.page !== undefined)
+        return { ...state, page: payload.page, animateProgress: false };
       return state;
     case "SET_SUBSCRIPTION_PAGE":
       if (payload && payload.subscriptionPage !== undefined)
@@ -41,25 +44,36 @@ const getCategories: (news: News[]) => Category[] = (news) => {
       return acc;
     }
     const current = acc.get(cur.category);
-    if (current) acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
+    if (current)
+      acc.set(cur.category, { firstIndex: current.firstIndex, count: current.count + 1 });
     return acc;
   }, new Map<string, { firstIndex: number; count: number }>());
 
   return Array.from(categoryMap, ([name, details]) => ({ name, details }));
 };
 
-function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubscribe }: ViewProps) {
-  const { showSnackBar, showAlert } = subscribeState;
+function ListView() {
+  const {
+    subscribeState: { showSnackBar, showAlert },
+    handleSubscribeClick,
+    handleUnsubscribeClick,
+  } = useSubscriptionEvents();
+  const { menuSelected } = useNavigation();
   const [{ news, subscription }] = useContext(NewsContext);
   const [_, subscribeDispatch] = useContext(SubscribeContext);
-  const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(pageReducer, initialPageState);
+  const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(
+    pageReducer,
+    initialPageState
+  );
   const [newsItem, setNewsItem] = useState<News>(news[page]);
 
   const setPage = (pageType: "page" | "subscriptionPage", operation: "increase" | "decrease") => {
     const currentPage = pageType === "page" ? page : subscriptionPage;
     const totalLength = pageType === "page" ? news.length : subscription.length;
     const updatedPage =
-      operation === "increase" ? increaseIndex(currentPage, totalLength) : decreaseIndex(currentPage, totalLength);
+      operation === "increase"
+        ? increaseIndex(currentPage, totalLength)
+        : decreaseIndex(currentPage, totalLength);
 
     pageDispatch({
       type: pageType === "page" ? "SET_PAGE" : "SET_SUBSCRIPTION_PAGE",
@@ -89,7 +103,9 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
   return (
     <>
       {showSnackBar && <SubscribeSnackbar />}
-      {showAlert && <UnsubscribeAlert name={newsItem.pressName} onUnsubscribe={handleUnsubscribe} />}
+      {showAlert && (
+        <UnsubscribeAlert name={newsItem.pressName} onUnsubscribe={handleUnsubscribeClick} />
+      )}
       {newsItem && (
         <Container>
           <TabBlock
@@ -100,7 +116,7 @@ function ListView({ menuSelected, subscribeState, handleSubscribe, handleUnsubsc
           />
           <DetailedNews
             newsItem={newsItem}
-            onSubscribe={handleSubscribe}
+            onSubscribe={handleSubscribeClick}
             onUnsubscribe={() => handleUnsubscribeButtonClick(newsItem.pressName)}
             isSubscribed={isSubscribed(newsItem.pressName, subscription)}
           />
