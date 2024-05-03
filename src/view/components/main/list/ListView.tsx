@@ -8,7 +8,7 @@ import DetailedNews from "./DetailedNews";
 import { NewsContext } from "../../provider/NewsProvider";
 import TabBlock from "./TabBlock";
 import { SubscribeContext } from "../../provider/SubscribeProvider";
-import { SubscribeSnackbar, UnsubscribeAlert } from "../Notification";
+import { SubscribeSnackbar, UnsubscribeAlert } from "../wrapper/Notification";
 import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
 import { useNavigation } from "../../provider/NavigationProvider";
 

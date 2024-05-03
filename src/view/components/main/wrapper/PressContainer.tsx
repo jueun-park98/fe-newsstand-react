@@ -1,10 +1,10 @@
-import { VIEW_STATES } from "../../constants";
-import GridView from "./grid/GridView";
-import ListView from "./list/ListView";
+import { VIEW_STATES } from "../../../constants";
+import GridView from "../grid/GridView";
+import ListView from "../list/ListView";
 import MenuSelector from "./MenuSelector";
 import ViewSelector from "./ViewSelector";
 import styled from "styled-components";
-import { useNavigation } from "../provider/NavigationProvider";
+import { useNavigation } from "../../provider/NavigationProvider";
 
 function PressContainer() {
   const { viewSelected } = useNavigation();

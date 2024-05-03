@@ -1,8 +1,8 @@
-import gridIcon from "../../../img/gridIcon.svg";
-import listIcon from "../../../img/listIcon.svg";
-import { VIEW_STATES } from "../../constants";
-import styled from 'styled-components';
-import { useNavigation } from '../provider/NavigationProvider';
+import gridIcon from "../../../../img/gridIcon.svg";
+import listIcon from "../../../../img/listIcon.svg";
+import { VIEW_STATES } from "../../../constants";
+import styled from "styled-components";
+import { useNavigation } from "../../provider/NavigationProvider";
 
 const ViewSelector = () => {
   const { viewSelected, setViewSelected } = useNavigation();

@@ -1,10 +1,10 @@
-import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { SubscribeSnackbar, UnsubscribeAlert } from './Notification';
-import { SubscribeContext } from '../provider/SubscribeProvider';
+import "@testing-library/jest-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { SubscribeSnackbar, UnsubscribeAlert } from "./Notification";
+import { SubscribeContext } from "../../provider/SubscribeProvider";
 
-describe('SubscribeSnackbar 렌더 테스트', () => {
-  it('정해진 메시지를 담은 스낵바가 렌더링 되는지 확인', () => {
+describe("SubscribeSnackbar 렌더 테스트", () => {
+  it("정해진 메시지를 담은 스낵바가 렌더링 되는지 확인", () => {
     //given
     const message = "내가 구독한 언론사에 추가되었습니다.";
 
@@ -16,7 +16,7 @@ describe('SubscribeSnackbar 렌더 테스트', () => {
   });
 });
 
-describe('UnsubscribeAlert 테스트', () => {
+describe("UnsubscribeAlert 테스트", () => {
   //given
   const mockUnsubscribe = jest.fn();
   const mockDispatch = jest.fn();
@@ -28,7 +28,7 @@ describe('UnsubscribeAlert 테스트', () => {
     alertMessage: "",
   };
 
-  it('알럿이 언론사의 이름와 함께 렌더링 되는지 확인', () => {
+  it("알럿이 언론사의 이름와 함께 렌더링 되는지 확인", () => {
     //when
     render(
       <SubscribeContext.Provider value={[initialSubscribeState, mockDispatch]}>
@@ -65,6 +65,9 @@ describe('UnsubscribeAlert 테스트', () => {
     fireEvent.click(screen.getByText(/아니오/i));
 
     //then
-    expect(mockDispatch).toHaveBeenCalledWith({ type: "SET_SHOW_ALERT", payload: { showAlert: false } });
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: "SET_SHOW_ALERT",
+      payload: { showAlert: false },
+    });
   });
 });

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { AlertProps } from "../../constants";
+import { AlertProps } from "../../../constants";
 import { useContext } from "react";
-import { SubscribeContext } from "../provider/SubscribeProvider";
+import { SubscribeContext } from "../../provider/SubscribeProvider";
 
 export function SubscribeSnackbar() {
   return (

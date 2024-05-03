@@ -1,6 +1,6 @@
-import { MENU_STATES } from "../../constants";
-import styled from 'styled-components';
-import { useNavigation } from '../provider/NavigationProvider';
+import { MENU_STATES } from "../../../constants";
+import styled from "styled-components";
+import { useNavigation } from "../../provider/NavigationProvider";
 
 const MenuSelector = () => {
   const { menuSelected, setMenuSelected } = useNavigation();

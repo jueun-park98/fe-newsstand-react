@@ -5,12 +5,11 @@ import rightArrow from "../../../../img/rightArrow.svg";
 import styled from "styled-components";
 import { decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils";
 import { NewsContext } from "../../provider/NewsProvider";
-import { SubscribeSnackbar, UnsubscribeAlert } from "../Notification";
-import SubscribeButton from "../SubscribeButton";
+import { SubscribeSnackbar, UnsubscribeAlert } from "../wrapper/Notification";
+import SubscribeButton from "../wrapper/SubscribeButton";
 import { SubscribeContext } from "../../provider/SubscribeProvider";
-import useSubscription from "../../../hooks/useSubscription";
 import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
-import { useNavigation } from '../../provider/NavigationProvider';
+import { useNavigation } from "../../provider/NavigationProvider";
 
 const FIRST_PAGE = 0;
 const MAX_PAGE = 4;
