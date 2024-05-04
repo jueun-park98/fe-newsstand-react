@@ -1,27 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { LogoState, MENU_STATES, News, ViewProps } from "../../../constants";
+import { LOGO_COUNT_PER_PAGE, LogoState, MAX_PAGE } from "../../../constants";
 import leftArrow from "../../../../img/leftArrow.svg";
 import rightArrow from "../../../../img/rightArrow.svg";
 import styled from "styled-components";
-import { decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils";
-import { NewsContext } from "../../provider/NewsProvider";
+import { calculateMaxPage, decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils";
 import { SubscribeSnackbar, UnsubscribeAlert } from "../wrapper/Notification";
 import SubscribeButton from "../wrapper/SubscribeButton";
-import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
-import { useNavigation } from "../../provider/NavigationProvider";
-import useSubscribeStore from "../../../hooks/useSubscribeStore";
-
-const FIRST_PAGE = 0;
-const MAX_PAGE = 4;
-const LOGO_COUNT_PER_PAGE = 24;
-
-const shuffle: (array: News[]) => LogoState[] = (array) => {
-  return [...array].sort((a, b) => Math.random() - 0.5).map(convertToLogo);
-};
-
-const convertToLogo: (news: News) => LogoState = (news) => {
-  return { src: news.logoImageSrc, name: news.pressName };
-};
+import useGridViewLogic from "../../../hooks/useGridViewLogic";
 
 const fillGridLogos = (logos: LogoState[], page: number, countPerPage: number) => {
   const pageLogos = logos.slice(page * countPerPage, (page + 1) * countPerPage);
@@ -31,37 +15,27 @@ const fillGridLogos = (logos: LogoState[], page: number, countPerPage: number) =
   return filledLogos;
 };
 
-const calculateMaxPage = (items: LogoState[]) => Math.ceil(items.length / LOGO_COUNT_PER_PAGE);
-
 const isEmptyObject = (object: object) => Object.keys(object).length === 0;
 
 function GridView() {
-  const { handleUnsubscribeClick } = useSubscriptionEvents();
-  const { menuSelected } = useNavigation();
-  const [{ news, subscription }] = useContext(NewsContext);
-  const { showSnackBar, showAlert, alertMessage } = useSubscribeStore();
-  const [page, setPage] = useState<number>(FIRST_PAGE);
-  const [logos, setLogos] = useState<LogoState[]>([]);
-
-  useEffect(() => {
-    if (menuSelected === MENU_STATES.allPress) {
-      const logosToSave = shuffle(news).slice(0, MAX_PAGE * LOGO_COUNT_PER_PAGE);
-      setLogos(logosToSave);
-      setPage(FIRST_PAGE);
-    }
-    if (menuSelected === MENU_STATES.subscribedPress) {
-      const logosToSave = subscription.map(convertToLogo);
-      setLogos(logosToSave);
-      page > calculateMaxPage(logosToSave) - 1 && setPage(calculateMaxPage(logosToSave) - 1);
-    }
-  }, [news, subscription, menuSelected]);
+  const {
+    showSnackBar,
+    showAlert,
+    alertMessage,
+    logos,
+    subscription,
+    handleUnsubscribeClick,
+    togglePage,
+    getCurrentPage,
+  } = useGridViewLogic();
+  const currentPage = getCurrentPage();
 
   return (
     <>
       {showSnackBar && <SubscribeSnackbar />}
       {showAlert && <UnsubscribeAlert name={alertMessage} onUnsubscribe={handleUnsubscribeClick} />}
       <Table>
-        {fillGridLogos(logos, page, LOGO_COUNT_PER_PAGE).map((logo) => (
+        {fillGridLogos(logos, currentPage, LOGO_COUNT_PER_PAGE).map((logo) => (
           <LogoBox>
             {!isEmptyObject(logo) && (
               <>
@@ -76,16 +50,16 @@ function GridView() {
         ))}
       </Table>
       <LeftArrow
-        page={page}
+        page={currentPage}
         maxPage={calculateMaxPage(logos)}
         src={leftArrow}
-        onClick={() => setPage(decreaseIndex(page, MAX_PAGE))}
+        onClick={() => togglePage(decreaseIndex(currentPage, MAX_PAGE))}
       />
       <RightArrow
-        page={page}
+        page={currentPage}
         maxPage={calculateMaxPage(logos)}
         src={rightArrow}
-        onClick={() => setPage(increaseIndex(page, MAX_PAGE))}
+        onClick={() => togglePage(increaseIndex(currentPage, MAX_PAGE))}
       />
     </>
   );

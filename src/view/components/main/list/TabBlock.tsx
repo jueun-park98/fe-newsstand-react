@@ -3,11 +3,11 @@ import styled, { keyframes } from "styled-components";
 import { AllPressTabsProps, MENU_STATES, TabProps } from "../../../constants";
 import { NewsContext } from "../../provider/NewsProvider";
 import { useContext } from "react";
-import useListPageStore from "../../../hooks/useListPageStore";
+import usePageStore from "../../../hooks/usePageStore";
 
 function AllPressTabs({ categories }: AllPressTabsProps) {
   const [{ news }] = useContext(NewsContext);
-  const { page, setPage } = useListPageStore();
+  const { page, setPage } = usePageStore();
 
   const increasePage = () => setPage(increaseIndex(page, news.length));
 
@@ -34,7 +34,7 @@ function AllPressTabs({ categories }: AllPressTabsProps) {
 
 function SubscribedPressTabs() {
   const [{ subscription }] = useContext(NewsContext);
-  const { subscriptionPage, setSubscriptionPage } = useListPageStore();
+  const { subscriptionPage, setSubscriptionPage } = usePageStore();
 
   const increaseSubscriptionPage = () =>
     setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));

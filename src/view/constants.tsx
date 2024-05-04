@@ -128,3 +128,6 @@ export const VIEW_STATES = {
   grid: "GRID",
   list: "LIST",
 };
+
+export const MAX_PAGE = 4;
+export const LOGO_COUNT_PER_PAGE = 24;
