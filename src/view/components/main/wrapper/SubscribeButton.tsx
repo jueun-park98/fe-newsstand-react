@@ -1,16 +1,30 @@
 import styled from "styled-components";
-import { SubscribeButtonProps } from "../../../constants";
 import plusSymbol from "../../../../img/plusSymbol.svg";
+import { useSubscriptionEvents } from '../../../hooks/useSubscriptionEvents';
+import useSubscribeStore from '../../../hooks/useSubscribeStore';
 
-function SubscribeButton({ name, onSubscribe, onUnsubscribe, isSubscribed }: SubscribeButtonProps) {
+interface SubscribeButtonProps {
+  name: string;
+  isSubscribed: boolean;
+}
+
+function SubscribeButton({ name, isSubscribed }: SubscribeButtonProps) {
+  const { handleSubscribeClick } = useSubscriptionEvents(); 
+  const { setShowAlert, setAlertMessage } = useSubscribeStore();
+
+  const handleUnsubscribeButtonClick = (name: string) => {
+    setShowAlert(true);
+    setAlertMessage(name);
+  };
+
   return (
     <>
       {isSubscribed ? (
-        <ClickButton onClick={() => onUnsubscribe(name)}>
+        <ClickButton onClick={() => handleUnsubscribeButtonClick(name)}>
           <UnsubscribeImage src={plusSymbol} />
         </ClickButton>
       ) : (
-        <ClickButton onClick={() => onSubscribe(name)}>
+        <ClickButton onClick={() => handleSubscribeClick(name)}>
           <PlusImage src={plusSymbol} />
           <div>구독하기</div>
         </ClickButton>

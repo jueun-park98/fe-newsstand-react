@@ -1,30 +1,22 @@
 import { increaseIndex, isInRange } from "../../../utils/Utils";
-import styled, { css, keyframes } from "styled-components";
-import {
-  AllPressTabsProps,
-  MENU_STATES,
-  SubscribedPressTabsProps,
-  TabProps,
-} from "../../../constants";
+import styled, { keyframes } from "styled-components";
+import { AllPressTabsProps, MENU_STATES, TabProps } from "../../../constants";
 import { NewsContext } from "../../provider/NewsProvider";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
+import usePageStore from "../../../hooks/usePageStore";
 
-function AllPressTabs({
-  categories,
-  page,
-  animateProgress,
-  increasePage,
-  setPage,
-}: AllPressTabsProps) {
+function AllPressTabs({ categories }: AllPressTabsProps) {
+  const [{ news }] = useContext(NewsContext);
+  const { page, setPage } = usePageStore();
+
+  const increasePage = () => setPage(increaseIndex(page, news.length));
+
   return (
     <>
       {categories.map(({ name, details: { firstIndex, count } }) =>
         isInRange(page, firstIndex, count) ? (
           <ActiveTab>
-            <ProgressBar
-              animate={animateProgress}
-              onAnimationIteration={increasePage}
-            ></ProgressBar>
+            <ProgressBar key={`press-${page}`} onAnimationEnd={increasePage}></ProgressBar>
             <TabDescription>
               <div>{name}</div>
               <div>
@@ -40,21 +32,21 @@ function AllPressTabs({
   );
 }
 
-function SubscribedPressTabs({
-  subscription,
-  subscriptionPage,
-  animateProgress,
-  increaseSubscriptionPage,
-  setSubscriptionPage,
-}: SubscribedPressTabsProps) {
+function SubscribedPressTabs() {
+  const [{ subscription }] = useContext(NewsContext);
+  const { subscriptionPage, setSubscriptionPage } = usePageStore();
+
+  const increaseSubscriptionPage = () =>
+    setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
+
   return (
     <>
       {subscription.map(({ pressName }, index) =>
         subscriptionPage === index ? (
           <ActiveTab>
             <ProgressBar
-              animate={animateProgress}
-              onAnimationIteration={increaseSubscriptionPage}
+              key={`subscribed-press-${subscriptionPage}`}
+              onAnimationEnd={increaseSubscriptionPage}
             ></ProgressBar>
             <TabDescription>
               <div>{pressName}</div>
@@ -68,41 +60,11 @@ function SubscribedPressTabs({
   );
 }
 
-function TabBlock({ menuSelected, categories, pageState, dispatch }: TabProps) {
-  const [{ news, subscription }] = useContext(NewsContext);
-  const { page, subscriptionPage, animateProgress } = pageState;
-
-  const setPage = (page: number) => dispatch({ type: "SET_PAGE", payload: { page } });
-  const increasePage = () => setPage(increaseIndex(page, news.length));
-  const setSubscriptionPage = (subscriptionPage: number) =>
-    dispatch({ type: "SET_SUBSCRIPTION_PAGE", payload: { subscriptionPage } });
-  const increaseSubscriptionPage = () =>
-    setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
-
-  useEffect(() => {
-    dispatch({ type: "START_ANIMATION" });
-  }, [page, subscriptionPage]);
-
+function TabBlock({ menuSelected, categories }: TabProps) {
   return (
     <Container>
-      {menuSelected === MENU_STATES.allPress && (
-        <AllPressTabs
-          categories={categories}
-          page={page}
-          animateProgress={animateProgress}
-          increasePage={increasePage}
-          setPage={setPage}
-        />
-      )}
-      {menuSelected === MENU_STATES.subscribedPress && (
-        <SubscribedPressTabs
-          subscription={subscription}
-          subscriptionPage={subscriptionPage}
-          animateProgress={animateProgress}
-          increaseSubscriptionPage={increaseSubscriptionPage}
-          setSubscriptionPage={setSubscriptionPage}
-        />
-      )}
+      {menuSelected === MENU_STATES.allPress && <AllPressTabs categories={categories} />}
+      {menuSelected === MENU_STATES.subscribedPress && <SubscribedPressTabs />}
     </Container>
   );
 }
@@ -137,14 +99,10 @@ const ActiveTab = styled.div`
   font-weight: 700;
 `;
 
-const ProgressBar = styled.div<{ animate: boolean }>`
+const ProgressBar = styled.div`
   height: 2.8571em;
   background-color: #4362d0;
-  ${({ animate }) =>
-    animate &&
-    css`
-      animation: ${increaseWidth} 20s infinite linear;
-    `};
+  animation: ${increaseWidth} 20s linear;
 `;
 
 const InactiveTab = styled.div`

@@ -20,22 +20,18 @@ const mockNewsItem: DetailedNewsProps = {
     ],
     pressName: "Example Press",
   },
-  onSubscribe: jest.fn(),
-  onUnsubscribe: jest.fn(),
   isSubscribed: false,
 };
 
 describe("DetailedNews 렌더 테스트", () => {
   it("DetailedNews가 mockNewsItem의 내용을 담은 하위 컴포넌트와 함께 렌더링 되는지 확인", () => {
     //given
-    const { newsItem, onSubscribe, onUnsubscribe, isSubscribed } = mockNewsItem;
+    const { newsItem, isSubscribed } = mockNewsItem;
 
     //when
     render(
       <DetailedNews
         newsItem={newsItem}
-        onSubscribe={onSubscribe}
-        onUnsubscribe={onUnsubscribe}
         isSubscribed={isSubscribed}
       />
     );
@@ -51,14 +47,12 @@ describe("DetailedNews 렌더 테스트", () => {
 
   it("DetailedNews의 하위 컴포넌트 attributes에 값이 저장되는지 확인 ", () => {
     //given
-    const { newsItem, onSubscribe, onUnsubscribe, isSubscribed } = mockNewsItem;
+    const { newsItem, isSubscribed } = mockNewsItem;
 
     //when
     render(
       <DetailedNews
         newsItem={newsItem}
-        onSubscribe={onSubscribe}
-        onUnsubscribe={onUnsubscribe}
         isSubscribed={isSubscribed}
       />
     );
