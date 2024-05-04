@@ -3,17 +3,15 @@ import { create } from "zustand";
 interface ListPageState {
   page: number;
   subscriptionPage: number;
-  animateProgress: boolean;
-  setPage: (pageType: "page" | "subscriptionPage", updatedPage: number) => void;
-  startAnimation: () => void;
+  setPage: (page: number) => void;
+  setSubscriptionPage: (page: number) => void;
 }
 
 const useListPageStore = create<ListPageState>((set) => ({
   page: 0,
   subscriptionPage: 0,
-  animateProgress: false,
-  setPage: (pageType, updatedPage) => set((state) => ({ ...state, [pageType]: updatedPage, animateProgress: false })),
-  startAnimation: () => set({ animateProgress: true }),
+  setPage: (page: number) => set((state) => ({ ...state, page: page })),
+  setSubscriptionPage: (subscriptionPage: number) => set((state) => ({ ...state, subscriptionPage: subscriptionPage })),
 }));
 
 export default useListPageStore;

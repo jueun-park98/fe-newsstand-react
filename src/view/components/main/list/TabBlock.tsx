@@ -1,25 +1,22 @@
 import { increaseIndex, isInRange } from "../../../utils/Utils";
-import styled, { css, keyframes } from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { AllPressTabsProps, MENU_STATES, TabProps } from "../../../constants";
 import { NewsContext } from "../../provider/NewsProvider";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import useListPageStore from "../../../hooks/useListPageStore";
 
 function AllPressTabs({ categories }: AllPressTabsProps) {
   const [{ news }] = useContext(NewsContext);
-  const { page, setPage, startAnimation } = useListPageStore();
+  const { page, setPage } = useListPageStore();
 
-  useEffect(startAnimation, [page]);
+  const increasePage = () => setPage(increaseIndex(page, news.length));
 
   return (
     <>
       {categories.map(({ name, details: { firstIndex, count } }) =>
         isInRange(page, firstIndex, count) ? (
           <ActiveTab>
-            <ProgressBar
-              key={`press-${page}`}
-              onAnimationEnd={() => setPage("page", increaseIndex(page, news.length))}
-            ></ProgressBar>
+            <ProgressBar key={`press-${page}`} onAnimationEnd={increasePage}></ProgressBar>
             <TabDescription>
               <div>{name}</div>
               <div>
@@ -28,7 +25,7 @@ function AllPressTabs({ categories }: AllPressTabsProps) {
             </TabDescription>
           </ActiveTab>
         ) : (
-          <InactiveTab onClick={() => setPage("page", firstIndex)}>{name}</InactiveTab>
+          <InactiveTab onClick={() => setPage(firstIndex)}>{name}</InactiveTab>
         )
       )}
     </>
@@ -37,9 +34,10 @@ function AllPressTabs({ categories }: AllPressTabsProps) {
 
 function SubscribedPressTabs() {
   const [{ subscription }] = useContext(NewsContext);
-  const { subscriptionPage, setPage, startAnimation } = useListPageStore();
+  const { subscriptionPage, setSubscriptionPage } = useListPageStore();
 
-  useEffect(startAnimation, [subscriptionPage]);
+  const increaseSubscriptionPage = () =>
+    setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
 
   return (
     <>
@@ -48,16 +46,14 @@ function SubscribedPressTabs() {
           <ActiveTab>
             <ProgressBar
               key={`subscribed-press-${subscriptionPage}`}
-              onAnimationEnd={() =>
-                setPage("subscriptionPage", increaseIndex(subscriptionPage, subscription.length))
-              }
+              onAnimationEnd={increaseSubscriptionPage}
             ></ProgressBar>
             <TabDescription>
               <div>{pressName}</div>
             </TabDescription>
           </ActiveTab>
         ) : (
-          <InactiveTab onClick={() => setPage("subscriptionPage", index)}>{pressName}</InactiveTab>
+          <InactiveTab onClick={() => setSubscriptionPage(index)}>{pressName}</InactiveTab>
         )
       )}
     </>

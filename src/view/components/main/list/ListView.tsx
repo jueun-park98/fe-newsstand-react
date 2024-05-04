@@ -31,7 +31,7 @@ const getCategories: (news: News[]) => Category[] = (news) => {
 };
 
 function ListView() {
-  const { page, subscriptionPage, setPage } = useListPageStore();
+  const { page, subscriptionPage, setPage, setSubscriptionPage } = useListPageStore();
   const {
     subscribeState: { showSnackBar, showAlert },
     handleSubscribeClick,
@@ -50,7 +50,7 @@ function ListView() {
         ? increaseIndex(currentPage, totalLength)
         : decreaseIndex(currentPage, totalLength);
 
-    setPage(pageType, updatedPage);
+    pageType === "page" ? setPage(updatedPage) : setSubscriptionPage(updatedPage);
   };
 
   const handlePageClick = (operation: "increase" | "decrease") => {
