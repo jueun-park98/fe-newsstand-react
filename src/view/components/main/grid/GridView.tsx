@@ -7,9 +7,9 @@ import { decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils
 import { NewsContext } from "../../provider/NewsProvider";
 import { SubscribeSnackbar, UnsubscribeAlert } from "../wrapper/Notification";
 import SubscribeButton from "../wrapper/SubscribeButton";
-import { SubscribeContext } from "../../provider/SubscribeProvider";
 import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
 import { useNavigation } from "../../provider/NavigationProvider";
+import useSubscribeStore from "../../../hooks/useSubscribeStore";
 
 const FIRST_PAGE = 0;
 const MAX_PAGE = 4;
@@ -31,25 +31,17 @@ const fillGridLogos = (logos: LogoState[], page: number, countPerPage: number) =
   return filledLogos;
 };
 
+const calculateMaxPage = (items: LogoState[]) => Math.ceil(items.length / LOGO_COUNT_PER_PAGE);
+
 const isEmptyObject = (object: object) => Object.keys(object).length === 0;
 
 function GridView() {
-  const {
-    subscribeState: { showSnackBar, showAlert, alertMessage },
-    handleSubscribeClick,
-    handleUnsubscribeClick,
-  } = useSubscriptionEvents();
+  const { handleUnsubscribeClick } = useSubscriptionEvents();
   const { menuSelected } = useNavigation();
   const [{ news, subscription }] = useContext(NewsContext);
-  const [_, subscribeDispatch] = useContext(SubscribeContext);
+  const { showSnackBar, showAlert, alertMessage } = useSubscribeStore();
   const [page, setPage] = useState<number>(FIRST_PAGE);
   const [logos, setLogos] = useState<LogoState[]>([]);
-
-  const calculateMaxPage = (items: LogoState[]) => Math.ceil(items.length / LOGO_COUNT_PER_PAGE);
-  const handleUnsubscribeButtonClick = (logoName: string) => {
-    subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
-    subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: logoName } });
-  };
 
   useEffect(() => {
     if (menuSelected === MENU_STATES.allPress) {
@@ -76,8 +68,6 @@ function GridView() {
                 <Logo src={logo.src} name={logo.name} />
                 <SubscribeButton
                   name={logo.name}
-                  onSubscribe={handleSubscribeClick}
-                  onUnsubscribe={() => handleUnsubscribeButtonClick(logo.name)}
                   isSubscribed={isSubscribed(logo.name, subscription)}
                 />
               </>

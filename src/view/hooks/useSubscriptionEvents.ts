@@ -1,11 +1,9 @@
 import { useContext } from "react";
 import useSubscription from "../hooks/useSubscription";
 import { NewsContext } from "../components/provider/NewsProvider";
-import { SubscribeContext } from "../components/provider/SubscribeProvider";
 
 export function useSubscriptionEvents() {
   const [{ news, subscription }] = useContext(NewsContext);
-  const [subscribeState] = useContext(SubscribeContext);
   const { postSubscriptionMutation, deleteSubscriptionMutation } = useSubscription();
 
   const handleSubscribeClick = async (logoName: string) => {
@@ -26,5 +24,5 @@ export function useSubscriptionEvents() {
     deleteSubscriptionMutation.mutate(subscriptionItem._id);
   };
 
-  return { handleSubscribeClick, handleUnsubscribeClick, subscribeState };
+  return { handleSubscribeClick, handleUnsubscribeClick };
 }

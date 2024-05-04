@@ -7,11 +7,11 @@ import { decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils
 import DetailedNews from "./DetailedNews";
 import { NewsContext } from "../../provider/NewsProvider";
 import TabBlock from "./TabBlock";
-import { SubscribeContext } from "../../provider/SubscribeProvider";
 import { SubscribeSnackbar, UnsubscribeAlert } from "../wrapper/Notification";
 import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
 import { useNavigation } from "../../provider/NavigationProvider";
-import useListPageStore from '../../../hooks/useListPageStore';
+import useListPageStore from "../../../hooks/useListPageStore";
+import useSubscribeStore from "../../../hooks/useSubscribeStore";
 
 const FIRST_INDEX = 0;
 
@@ -32,17 +32,16 @@ const getCategories: (news: News[]) => Category[] = (news) => {
 
 function ListView() {
   const { page, subscriptionPage, setPage, setSubscriptionPage } = useListPageStore();
-  const {
-    subscribeState: { showSnackBar, showAlert },
-    handleSubscribeClick,
-    handleUnsubscribeClick,
-  } = useSubscriptionEvents();
+  const { handleUnsubscribeClick } = useSubscriptionEvents();
   const { menuSelected } = useNavigation();
   const [{ news, subscription }] = useContext(NewsContext);
-  const [_, subscribeDispatch] = useContext(SubscribeContext);
+  const { showSnackBar, showAlert } = useSubscribeStore();
   const [newsItem, setNewsItem] = useState<News>(news[page]);
 
-  const togglePage = (pageType: "page" | "subscriptionPage", operation: "increase" | "decrease") => {
+  const togglePage = (
+    pageType: "page" | "subscriptionPage",
+    operation: "increase" | "decrease"
+  ) => {
     const currentPage = pageType === "page" ? page : subscriptionPage;
     const totalLength = pageType === "page" ? news.length : subscription.length;
     const updatedPage =
@@ -56,11 +55,6 @@ function ListView() {
   const handlePageClick = (operation: "increase" | "decrease") => {
     if (menuSelected === MENU_STATES.allPress) togglePage("page", operation);
     if (menuSelected === MENU_STATES.subscribedPress) togglePage("subscriptionPage", operation);
-  };
-
-  const handleUnsubscribeButtonClick = (name: string) => {
-    subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: true } });
-    subscribeDispatch({ type: "SET_ALERT_MESSAGE", payload: { alertMessage: name } });
   };
 
   useEffect(() => {
@@ -80,14 +74,9 @@ function ListView() {
       )}
       {newsItem && (
         <Container>
-          <TabBlock
-            menuSelected={menuSelected}
-            categories={getCategories(news)}
-          />
+          <TabBlock menuSelected={menuSelected} categories={getCategories(news)} />
           <DetailedNews
             newsItem={newsItem}
-            onSubscribe={handleSubscribeClick}
-            onUnsubscribe={() => handleUnsubscribeButtonClick(newsItem.pressName)}
             isSubscribed={isSubscribed(newsItem.pressName, subscription)}
           />
           <LeftArrow src={leftArrow} onClick={() => handlePageClick("decrease")}></LeftArrow>

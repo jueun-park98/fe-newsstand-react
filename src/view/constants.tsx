@@ -1,5 +1,3 @@
-import React from "react";
-
 interface Headline {
   thumbnailSrc: string;
   title: string;
@@ -47,8 +45,7 @@ export interface ViewProps {
 }
 
 export interface DetailedNewsProps extends NewsProps {
-  onSubscribe: (name: string) => void;
-  onUnsubscribe: (name: string) => void;
+  newsItem: News;
   isSubscribed: boolean;
 }
 

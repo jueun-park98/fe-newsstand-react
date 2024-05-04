@@ -15,12 +15,7 @@ describe("SubscribeButton 테스트", () => {
 
     //when
     render(
-      <SubscribeButton
-        name={mockButtonProps.name}
-        onSubscribe={mockButtonProps.onSubscribe}
-        onUnsubscribe={mockButtonProps.onUnsubscribe}
-        isSubscribed={mockButtonProps.isSubscribed}
-      />
+      <SubscribeButton name={mockButtonProps.name} isSubscribed={mockButtonProps.isSubscribed} />
     );
 
     //then
@@ -39,12 +34,7 @@ describe("SubscribeButton 테스트", () => {
 
     //when
     render(
-      <SubscribeButton
-        name={mockButtonProps.name}
-        onSubscribe={mockButtonProps.onSubscribe}
-        onUnsubscribe={mockButtonProps.onUnsubscribe}
-        isSubscribed={mockButtonProps.isSubscribed}
-      />
+      <SubscribeButton name={mockButtonProps.name} isSubscribed={mockButtonProps.isSubscribed} />
     );
     const buttonText = screen.queryByText(message);
 
@@ -64,12 +54,7 @@ describe("SubscribeButton 테스트", () => {
 
     //when
     render(
-      <SubscribeButton
-        name={mockButtonProps.name}
-        onSubscribe={mockButtonProps.onSubscribe}
-        onUnsubscribe={mockButtonProps.onUnsubscribe}
-        isSubscribed={mockButtonProps.isSubscribed}
-      />
+      <SubscribeButton name={mockButtonProps.name} isSubscribed={mockButtonProps.isSubscribed} />
     );
     fireEvent.click(screen.getByRole("button"));
 
@@ -88,12 +73,7 @@ describe("SubscribeButton 테스트", () => {
 
     //when
     render(
-      <SubscribeButton
-        name={mockButtonProps.name}
-        onSubscribe={mockButtonProps.onSubscribe}
-        onUnsubscribe={mockButtonProps.onUnsubscribe}
-        isSubscribed={mockButtonProps.isSubscribed}
-      />
+      <SubscribeButton name={mockButtonProps.name} isSubscribed={mockButtonProps.isSubscribed} />
     );
     fireEvent.click(screen.getByRole("button"));
 
