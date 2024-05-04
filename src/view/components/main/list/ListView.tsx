@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import leftArrow from "../../../../img/leftArrow.svg";
 import rightArrow from "../../../../img/rightArrow.svg";
-import { Category, MENU_STATES, News, PageAction, PageState, ViewProps } from "../../../constants";
-import { useContext, useEffect, useReducer, useState } from "react";
+import { Category, MENU_STATES, News } from "../../../constants";
+import { useContext, useEffect, useState } from "react";
 import { decreaseIndex, increaseIndex, isSubscribed } from "../../../utils/Utils";
 import DetailedNews from "./DetailedNews";
 import { NewsContext } from "../../provider/NewsProvider";
@@ -11,31 +11,9 @@ import { SubscribeContext } from "../../provider/SubscribeProvider";
 import { SubscribeSnackbar, UnsubscribeAlert } from "../wrapper/Notification";
 import { useSubscriptionEvents } from "../../../hooks/useSubscriptionEvents";
 import { useNavigation } from "../../provider/NavigationProvider";
+import useListPageStore from '../../../hooks/useListPageStore';
 
 const FIRST_INDEX = 0;
-
-const initialPageState = {
-  page: 0,
-  subscriptionPage: 0,
-  animateProgress: true,
-};
-
-export const pageReducer = (state: PageState, { type, payload }: PageAction) => {
-  switch (type) {
-    case "SET_PAGE":
-      if (payload && payload.page !== undefined)
-        return { ...state, page: payload.page, animateProgress: false };
-      return state;
-    case "SET_SUBSCRIPTION_PAGE":
-      if (payload && payload.subscriptionPage !== undefined)
-        return { ...state, subscriptionPage: payload.subscriptionPage, animateProgress: false };
-      return state;
-    case "START_ANIMATION":
-      return { ...state, animateProgress: true };
-    default:
-      return state;
-  }
-};
 
 const getCategories: (news: News[]) => Category[] = (news) => {
   const categoryMap = news.reduce((acc, cur, index) => {
@@ -53,6 +31,7 @@ const getCategories: (news: News[]) => Category[] = (news) => {
 };
 
 function ListView() {
+  const { page, subscriptionPage, setPage } = useListPageStore();
   const {
     subscribeState: { showSnackBar, showAlert },
     handleSubscribeClick,
@@ -61,13 +40,9 @@ function ListView() {
   const { menuSelected } = useNavigation();
   const [{ news, subscription }] = useContext(NewsContext);
   const [_, subscribeDispatch] = useContext(SubscribeContext);
-  const [{ page, subscriptionPage, animateProgress }, pageDispatch] = useReducer(
-    pageReducer,
-    initialPageState
-  );
   const [newsItem, setNewsItem] = useState<News>(news[page]);
 
-  const setPage = (pageType: "page" | "subscriptionPage", operation: "increase" | "decrease") => {
+  const togglePage = (pageType: "page" | "subscriptionPage", operation: "increase" | "decrease") => {
     const currentPage = pageType === "page" ? page : subscriptionPage;
     const totalLength = pageType === "page" ? news.length : subscription.length;
     const updatedPage =
@@ -75,15 +50,12 @@ function ListView() {
         ? increaseIndex(currentPage, totalLength)
         : decreaseIndex(currentPage, totalLength);
 
-    pageDispatch({
-      type: pageType === "page" ? "SET_PAGE" : "SET_SUBSCRIPTION_PAGE",
-      payload: pageType === "page" ? { page: updatedPage } : { subscriptionPage: updatedPage },
-    });
+    setPage(pageType, updatedPage);
   };
 
   const handlePageClick = (operation: "increase" | "decrease") => {
-    if (menuSelected === MENU_STATES.allPress) setPage("page", operation);
-    if (menuSelected === MENU_STATES.subscribedPress) setPage("subscriptionPage", operation);
+    if (menuSelected === MENU_STATES.allPress) togglePage("page", operation);
+    if (menuSelected === MENU_STATES.subscribedPress) togglePage("subscriptionPage", operation);
   };
 
   const handleUnsubscribeButtonClick = (name: string) => {
@@ -95,7 +67,7 @@ function ListView() {
     if (menuSelected === MENU_STATES.allPress) setNewsItem(news[page]);
     if (menuSelected === MENU_STATES.subscribedPress) setNewsItem(subscription[subscriptionPage]);
     if (subscriptionPage >= subscription.length) {
-      setPage("subscriptionPage", "increase");
+      togglePage("subscriptionPage", "increase");
       setNewsItem(subscription[FIRST_INDEX]);
     }
   }, [news, subscription, menuSelected, page, subscriptionPage]);
@@ -111,8 +83,6 @@ function ListView() {
           <TabBlock
             menuSelected={menuSelected}
             categories={getCategories(news)}
-            pageState={{ page, subscriptionPage, animateProgress }}
-            dispatch={pageDispatch}
           />
           <DetailedNews
             newsItem={newsItem}

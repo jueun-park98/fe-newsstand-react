@@ -1,29 +1,24 @@
 import { increaseIndex, isInRange } from "../../../utils/Utils";
 import styled, { css, keyframes } from "styled-components";
-import {
-  AllPressTabsProps,
-  MENU_STATES,
-  SubscribedPressTabsProps,
-  TabProps,
-} from "../../../constants";
+import { AllPressTabsProps, MENU_STATES, TabProps } from "../../../constants";
 import { NewsContext } from "../../provider/NewsProvider";
 import { useContext, useEffect } from "react";
+import useListPageStore from "../../../hooks/useListPageStore";
 
-function AllPressTabs({
-  categories,
-  page,
-  animateProgress,
-  increasePage,
-  setPage,
-}: AllPressTabsProps) {
+function AllPressTabs({ categories }: AllPressTabsProps) {
+  const [{ news }] = useContext(NewsContext);
+  const { page, setPage, startAnimation } = useListPageStore();
+
+  useEffect(startAnimation, [page]);
+
   return (
     <>
       {categories.map(({ name, details: { firstIndex, count } }) =>
         isInRange(page, firstIndex, count) ? (
           <ActiveTab>
             <ProgressBar
-              animate={animateProgress}
-              onAnimationIteration={increasePage}
+              key={`press-${page}`}
+              onAnimationEnd={() => setPage("page", increaseIndex(page, news.length))}
             ></ProgressBar>
             <TabDescription>
               <div>{name}</div>
@@ -33,76 +28,47 @@ function AllPressTabs({
             </TabDescription>
           </ActiveTab>
         ) : (
-          <InactiveTab onClick={() => setPage(firstIndex)}>{name}</InactiveTab>
+          <InactiveTab onClick={() => setPage("page", firstIndex)}>{name}</InactiveTab>
         )
       )}
     </>
   );
 }
 
-function SubscribedPressTabs({
-  subscription,
-  subscriptionPage,
-  animateProgress,
-  increaseSubscriptionPage,
-  setSubscriptionPage,
-}: SubscribedPressTabsProps) {
+function SubscribedPressTabs() {
+  const [{ subscription }] = useContext(NewsContext);
+  const { subscriptionPage, setPage, startAnimation } = useListPageStore();
+
+  useEffect(startAnimation, [subscriptionPage]);
+
   return (
     <>
       {subscription.map(({ pressName }, index) =>
         subscriptionPage === index ? (
           <ActiveTab>
             <ProgressBar
-              animate={animateProgress}
-              onAnimationIteration={increaseSubscriptionPage}
+              key={`subscribed-press-${subscriptionPage}`}
+              onAnimationEnd={() =>
+                setPage("subscriptionPage", increaseIndex(subscriptionPage, subscription.length))
+              }
             ></ProgressBar>
             <TabDescription>
               <div>{pressName}</div>
             </TabDescription>
           </ActiveTab>
         ) : (
-          <InactiveTab onClick={() => setSubscriptionPage(index)}>{pressName}</InactiveTab>
+          <InactiveTab onClick={() => setPage("subscriptionPage", index)}>{pressName}</InactiveTab>
         )
       )}
     </>
   );
 }
 
-function TabBlock({ menuSelected, categories, pageState, dispatch }: TabProps) {
-  const [{ news, subscription }] = useContext(NewsContext);
-  const { page, subscriptionPage, animateProgress } = pageState;
-
-  const setPage = (page: number) => dispatch({ type: "SET_PAGE", payload: { page } });
-  const increasePage = () => setPage(increaseIndex(page, news.length));
-  const setSubscriptionPage = (subscriptionPage: number) =>
-    dispatch({ type: "SET_SUBSCRIPTION_PAGE", payload: { subscriptionPage } });
-  const increaseSubscriptionPage = () =>
-    setSubscriptionPage(increaseIndex(subscriptionPage, subscription.length));
-
-  useEffect(() => {
-    dispatch({ type: "START_ANIMATION" });
-  }, [page, subscriptionPage]);
-
+function TabBlock({ menuSelected, categories }: TabProps) {
   return (
     <Container>
-      {menuSelected === MENU_STATES.allPress && (
-        <AllPressTabs
-          categories={categories}
-          page={page}
-          animateProgress={animateProgress}
-          increasePage={increasePage}
-          setPage={setPage}
-        />
-      )}
-      {menuSelected === MENU_STATES.subscribedPress && (
-        <SubscribedPressTabs
-          subscription={subscription}
-          subscriptionPage={subscriptionPage}
-          animateProgress={animateProgress}
-          increaseSubscriptionPage={increaseSubscriptionPage}
-          setSubscriptionPage={setSubscriptionPage}
-        />
-      )}
+      {menuSelected === MENU_STATES.allPress && <AllPressTabs categories={categories} />}
+      {menuSelected === MENU_STATES.subscribedPress && <SubscribedPressTabs />}
     </Container>
   );
 }
@@ -137,14 +103,10 @@ const ActiveTab = styled.div`
   font-weight: 700;
 `;
 
-const ProgressBar = styled.div<{ animate: boolean }>`
+const ProgressBar = styled.div`
   height: 2.8571em;
   background-color: #4362d0;
-  ${({ animate }) =>
-    animate &&
-    css`
-      animation: ${increaseWidth} 20s infinite linear;
-    `};
+  animation: ${increaseWidth} 20s linear;
 `;
 
 const InactiveTab = styled.div`

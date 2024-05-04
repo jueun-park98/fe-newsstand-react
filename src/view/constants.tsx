@@ -62,16 +62,10 @@ export interface RollingTextProps {
 export interface TabProps {
   menuSelected: string;
   categories: Category[];
-  pageState: PageState;
-  dispatch: React.Dispatch<PageAction>;
 }
 
 export interface AllPressTabsProps {
   categories: Category[];
-  page: number;
-  animateProgress: boolean;
-  increasePage: () => void;
-  setPage: (number: number) => void;
 }
 
 export interface SubscribedPressTabsProps {
