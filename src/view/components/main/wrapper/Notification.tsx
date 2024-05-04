@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { AlertProps } from "../../../constants";
-import { useContext } from "react";
-import { SubscribeContext } from "../../provider/SubscribeProvider";
+import useSubscribeStore from "../../../hooks/useSubscribeStore";
 
 export function SubscribeSnackbar() {
   return (
@@ -13,7 +12,7 @@ export function SubscribeSnackbar() {
 }
 
 export function UnsubscribeAlert({ name, onUnsubscribe }: AlertProps) {
-  const [_, subscribeDispatch] = useContext(SubscribeContext);
+  const { setShowAlert } = useSubscribeStore();
 
   return (
     <AlertContainer>
@@ -25,13 +24,7 @@ export function UnsubscribeAlert({ name, onUnsubscribe }: AlertProps) {
       </AlertContent>
       <AlertClickable>
         <AlertSubmit onClick={() => onUnsubscribe(name)}>예, 해지합니다</AlertSubmit>
-        <AlertCancel
-          onClick={() =>
-            subscribeDispatch({ type: "SET_SHOW_ALERT", payload: { showAlert: false } })
-          }
-        >
-          아니오
-        </AlertCancel>
+        <AlertCancel onClick={() => setShowAlert(false)}>아니오</AlertCancel>
       </AlertClickable>
     </AlertContainer>
   );

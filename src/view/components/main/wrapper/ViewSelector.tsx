@@ -3,9 +3,19 @@ import listIcon from "../../../../img/listIcon.svg";
 import { VIEW_STATES } from "../../../constants";
 import styled from "styled-components";
 import { useNavigation } from "../../provider/NavigationProvider";
+import { useEffect } from "react";
+import usePageStore from "../../../hooks/usePageStore";
+
+const INITIAL_PAGE_INDEX = 0;
 
 const ViewSelector = () => {
   const { viewSelected, setViewSelected } = useNavigation();
+  const { setPage, setSubscriptionPage } = usePageStore();
+
+  useEffect(() => {
+    setPage(INITIAL_PAGE_INDEX);
+    setSubscriptionPage(INITIAL_PAGE_INDEX);
+  }, [viewSelected]);
 
   return (
     <ViewMenu>

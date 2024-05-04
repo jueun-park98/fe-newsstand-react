@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { DetailedNewsProps } from "../../../constants";
 import SubscribeButton from "../wrapper/SubscribeButton";
+import { DetailedNewsProps } from '../../../constants';
 
-function DetailedNews({ newsItem, onSubscribe, onUnsubscribe, isSubscribed }: DetailedNewsProps) {
+function DetailedNews({ newsItem, isSubscribed }: DetailedNewsProps) {
   const {
     logoImageSrc,
     editedTime,
@@ -18,8 +18,6 @@ function DetailedNews({ newsItem, onSubscribe, onUnsubscribe, isSubscribed }: De
         <EditedTime>{editedTime}</EditedTime>
         <SubscribeButton
           name={pressName}
-          onSubscribe={onSubscribe}
-          onUnsubscribe={onUnsubscribe}
           isSubscribed={isSubscribed}
         ></SubscribeButton>
       </NewsInfo>

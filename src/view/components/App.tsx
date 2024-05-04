@@ -6,7 +6,6 @@ import PressContainer from "./main/wrapper/PressContainer";
 import { fetchNews, fetchSubscription } from "../api/NewsAPI";
 import { NewsContext } from "./provider/NewsProvider";
 import { News } from "../constants";
-import { SubscribeProvider } from "./provider/SubscribeProvider";
 import { NavigationProvider } from "./provider/NavigationProvider";
 
 function App() {
@@ -46,11 +45,9 @@ function App() {
     <div>
       <Header />
       <RollingContainer />
-      <SubscribeProvider>
-        <NavigationProvider>
-          <PressContainer />
-        </NavigationProvider>
-      </SubscribeProvider>
+      <NavigationProvider>
+        <PressContainer />
+      </NavigationProvider>
     </div>
   );
 }

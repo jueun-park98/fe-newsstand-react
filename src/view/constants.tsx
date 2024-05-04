@@ -1,5 +1,3 @@
-import React from "react";
-
 interface Headline {
   thumbnailSrc: string;
   title: string;
@@ -47,8 +45,7 @@ export interface ViewProps {
 }
 
 export interface DetailedNewsProps extends NewsProps {
-  onSubscribe: (name: string) => void;
-  onUnsubscribe: (name: string) => void;
+  newsItem: News;
   isSubscribed: boolean;
 }
 
@@ -62,16 +59,10 @@ export interface RollingTextProps {
 export interface TabProps {
   menuSelected: string;
   categories: Category[];
-  pageState: PageState;
-  dispatch: React.Dispatch<PageAction>;
 }
 
 export interface AllPressTabsProps {
   categories: Category[];
-  page: number;
-  animateProgress: boolean;
-  increasePage: () => void;
-  setPage: (number: number) => void;
 }
 
 export interface SubscribedPressTabsProps {
@@ -137,3 +128,6 @@ export const VIEW_STATES = {
   grid: "GRID",
   list: "LIST",
 };
+
+export const MAX_PAGE = 4;
+export const LOGO_COUNT_PER_PAGE = 24;
